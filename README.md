@@ -4,7 +4,13 @@ This repository documents the design and implementation of a **bidirectional DC-
 The system can operate in both **buck mode** (step-down) and **boost mode** (step-up), enabling power flow in both directions.  
 
 ---
-
+## Sofware used
+- **Simulation**
+  
+   Multisim, Ltspice and MATLAB/Simulink
+- **PCB**
+  
+   Kicad
 ## 📐 Specifications
 - **Switching frequency**: 60 kHz  
 - **Maximum power**: 5 W  
