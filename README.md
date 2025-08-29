@@ -10,12 +10,12 @@ The system can operate in both **buck mode** (step-down) and **boost mode** (ste
 - **Maximum power**: 5 W  
 
 ### Buck Mode
-- \( V_{in, min} = 23 \, V \)  
-- \( V_{out, max} = 14 \, V \)  
+- $V_{in, min} = 23V$  
+- $V_{out, max} = 14V$  
 
 ### Boost Mode
-- \( V_{in, min} = 12 \, V \)  
-- \( V_{out, max} = 27 \, V \)  
+- $V_{in, min} = 12V$  
+- $V_{out, max} = 27V$  
 
 ---
 
@@ -30,24 +30,23 @@ Diagram (preliminary):
 ## 📊 Design Parameters
 ### Inductor
 - To be dimensioned based on:  
-  \[
-  L = \frac{V_L \cdot D}{\Delta I_L \cdot f_s}
-  \]
+ $L = \frac{V_L \cdot D}{\Delta I_L \cdot f_s}$
   where:
-  - \( V_L \) = inductor voltage  
-  - \( D \) = duty cycle  
-  - \( \Delta I_L \) = current ripple (≈ 30% of \( I_{L,max} \))  
-  - \( f_s \) = switching frequency  
+  - \( $V_L$ \) = inductor voltage  
+  - \( $D$ \) = duty cycle  
+  - \( $\Delta I_L$ \) = current ripple (≈ $30$% of \( $I_{L,max}$ \))  
+  - \( $f_s$ \) = switching frequency  
 
 ### Capacitor
 - To be dimensioned from capacitor current balance:
-  \[
-  C = \frac{I_{out} \cdot D}{\Delta V \cdot f_s}
-  \]
+- buck
+  $C = \frac{\Delta I_L}{\Delta V \cdot f_s\cdot 8}$
+- boost
+  $C = \frac{I_{out} \cdot D}{\Delta V \cdot f_s}$
+  
   where:
-  - \( \Delta V \) = allowed voltage ripple  
+  - \( $\Delta V$ \) = allowed voltage ripple  
 
----
 
 ## 🗂️ Repository Structure
 
