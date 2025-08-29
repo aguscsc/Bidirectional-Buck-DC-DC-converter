@@ -29,7 +29,7 @@ The system can operate in both **buck mode** (step-down) and **boost mode** (ste
 The selected topology is based on a **bidirectional synchronous buck/boost converter**.  
 Diagram (preliminary):  
 
-![Topology](pics/topology)
+![Topology](pics/topology.png)
 
 ---
 
