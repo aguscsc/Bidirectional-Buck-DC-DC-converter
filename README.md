@@ -12,7 +12,7 @@ This repository contains the development steps for the making of a Bidirectional
 - V_{outmax}: 27[V]
 # Topology
 
-![Topology](pics/topology.png)
+![Topology](pics/topology)
 
 ## Inductance
 ## capacitance
