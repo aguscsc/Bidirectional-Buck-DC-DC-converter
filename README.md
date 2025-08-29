@@ -53,9 +53,6 @@ Diagram (preliminary):
   where:
   - \( $\Delta V$ \) = allowed voltage ripple  
 
-
-## 🗂️ Repository Structure
-
 ---
 
 ## ✅ TODO
