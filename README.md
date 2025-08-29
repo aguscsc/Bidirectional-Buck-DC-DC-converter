@@ -65,7 +65,7 @@ Diagram (preliminary):
 ## 👥 Collaborators
 - **[Agustín Torres](\ https://github.com/aguscsc \)**  
 - **[Ignacio Cerda](\ https://github.com/LovesCharlie \)**  
-- **[Gian Luca Barbagelata]**  
+- **[Gian Luca Barbagelata](\ https://github.com/Yian-n \)**  
 
 ---
 
