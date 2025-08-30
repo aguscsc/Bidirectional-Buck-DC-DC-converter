@@ -55,8 +55,7 @@ Diagram (preliminary):
 
 ---
 
-## ✅ TODO
-- [ ] Dimensioning (Mathcad calculations)  
+## ✅ TODO 
 - [ ] Component selection  
 - [ ] PCB design and layout  
 - [ ] Firmware integration (ESP32 control)  
