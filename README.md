@@ -29,7 +29,7 @@ The system can operate in both **buck mode** (step-down) and **boost mode** (ste
 The selected topology is based on a **bidirectional synchronous buck/boost converter**.  
 Diagram (preliminary):  
 
-![Topology](pics/topology)
+![Topology](pics/topology.png)
 
 ---
 
@@ -55,8 +55,7 @@ Diagram (preliminary):
 
 ---
 
-## ✅ TODO
-- [ ] Dimensioning (Mathcad calculations)  
+## ✅ TODO 
 - [ ] Component selection  
 - [ ] PCB design and layout  
 - [ ] Firmware integration (ESP32 control)  
