@@ -53,9 +53,9 @@ Plecs {
   ScriptsDialogGeometry ""
   ScriptsDialogSplitterPos "0"
   Schematic {
-    Location      [0, 26; 1536, 776]
+    Location      [0, 23; 1536, 773]
     ZoomFactor    1
-    SliderPosition [178, 0]
+    SliderPosition [0, 0]
     ShowBrowser   off
     BrowserWidth  100
     Component {
@@ -144,13 +144,13 @@ Plecs {
       Type          Inductor
       Name          "L1"
       Show          on
-      Position      [495, 145]
+      Position      [510, 145]
       Direction     left
       Flipped       off
       LabelPosition north
       Parameter {
         Variable      "L"
-        Value         "0.00016"
+        Value         "1e-3"
         Show          off
       }
       Parameter {
@@ -169,7 +169,7 @@ Plecs {
       LabelPosition west
       Parameter {
         Variable      "C"
-        Value         "119e-6"
+        Value         "61*10^-6"
         Show          off
       }
       Parameter {
@@ -358,7 +358,7 @@ Plecs {
       Frame         [-10, -10; 10, 10]
       Parameter {
         Variable      "Value"
-        Value         "0"
+        Value         "1"
         Show          off
       }
       Parameter {
@@ -620,7 +620,7 @@ Plecs {
       Type          From
       Name          "From2"
       Show          off
-      Position      [115, 210]
+      Position      [110, 230]
       Direction     right
       Flipped       off
       LabelPosition south
@@ -644,7 +644,7 @@ Plecs {
       Type          From
       Name          "From3"
       Show          off
-      Position      [35, 210]
+      Position      [30, 230]
       Direction     right
       Flipped       off
       LabelPosition south
@@ -990,11 +990,11 @@ Plecs {
       Direction     up
       Flipped       off
       LabelPosition south
-      Location      [0, 26; 1536, 849]
+      Location      [0, 26; 1536, 807]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAADYA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
 "///wAAAGgA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABoAP///wAAAAMAAAAAAAAAAPw"
-"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABQAP///wAABgAAAAMcAAAA"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABQAP///wAABgAAAALyAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
@@ -1092,19 +1092,19 @@ Plecs {
       Location      [0, 26; 1536, 849]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAC0AAACkPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAADYA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
-"///wAAAGgA////+wAAAAwAVAByAGEAYwBlAHMAAAAAMAAAApAAAABoAP///wAAAAMAAAYAAAAAYvw"
-"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABgAAAABQAP///wAABgAAAAK2AAAA"
+"///wAAAGgA////+wAAAAwAVAByAGEAYwBlAHMAAAAAMAAAApAAAABoAP///wAAAAMAAAYAAAAAiPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABgAAAABQAP///wAABgAAAAKQAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "{\"DefaultSecSize\":0,\"FirstSecSize\":157,\"Labels\":[\""
-"Delta\"],\"VisualIdxs\":[3]}"
+      HeaderState   "{\"DefaultSecSize\":100,\"FirstSecSize\":157,\"Labels\":["
+"\"Delta\"],\"VisualIdxs\":[3]}"
       PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
       Axes          "1"
       TimeRange     "0.0"
       ScrollingMode "1"
       SingleTimeAxis "1"
-      Open          "0"
+      Open          "1"
       Ts            "-1"
       SampleLimit   "0"
       XAxisLabel    "Time / s"
@@ -1136,259 +1136,6 @@ Plecs {
           KeepBaseline  off
           BaselineValue 0
         }
-      }
-    }
-    Component {
-      Type          PlecsProbe
-      Name          "Probe2"
-      Show          on
-      Position      [960, 475]
-      Direction     right
-      Flipped       off
-      LabelPosition south
-      Probe {
-        Component     "L1"
-        Path          ""
-        Signals       {"Inductor current"}
-      }
-    }
-    Component {
-      Type          Scope
-      Name          "Scope2"
-      Show          on
-      Position      [1055, 475]
-      Direction     up
-      Flipped       off
-      LabelPosition south
-      Location      [0, 26; 1536, 849]
-      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAC0AAACkPwCAAAAA/sAAAAQAFoAbwBvA"
-"G0AQQByAGUAYQAAAAAA/////wAAADYA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
-"///wAAAGgA////+wAAAAwAVAByAGEAYwBlAHMAAAAAMAAAApAAAABoAP///wAAAAMAAAYAAAAAYvw"
-"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABgAAAABQAP///wAABgAAAAK2AAAA"
-"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
-"AAAAA=="
-      SavedViews    "AAAAAgAAAAA="
-      HeaderState   "{\"DefaultSecSize\":0,\"FirstSecSize\":157,\"Labels\":[\""
-"Delta\"],\"VisualIdxs\":[3]}"
-      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-      Axes          "1"
-      TimeRange     "0.0"
-      ScrollingMode "1"
-      SingleTimeAxis "1"
-      Open          "0"
-      Ts            "-1"
-      SampleLimit   "0"
-      XAxisLabel    "Time / s"
-      ShowLegend    "1"
-      Axis {
-        Name          ""
-        AutoScale     1
-        MinValue      0
-        MaxValue      1
-        Signals       {}
-        SignalTypes   [ ]
-        Untangle      0
-        KeepBaseline  off
-        BaselineValue 0
-      }
-      Fourier {
-        SingleXAxis       on
-        AxisLabel         "Frequency / Hz"
-        Scaling           0
-        PhaseDisplay      0
-        ShowFourierLegend off
-        Axis {
-          Name          ""
-          AutoScale     1
-          MinValue      0
-          MaxValue      1
-          Signals       {}
-          Untangle      0
-          KeepBaseline  off
-          BaselineValue 0
-        }
-      }
-    }
-    Component {
-      Type          Mosfet
-      Name          "MOSFET1"
-      Show          on
-      Position      [1545, 240]
-      Direction     right
-      Flipped       off
-      LabelPosition south
-      Parameter {
-        Variable      "Ron"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "s_init"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "thermal"
-        Value         ""
-        Show          off
-      }
-      Parameter {
-        Variable      "Rth"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "T_init"
-        Value         ""
-        Show          off
-      }
-    }
-    Component {
-      Type          Mosfet
-      Name          "MOSFET2"
-      Show          on
-      Position      [1430, 295]
-      Direction     down
-      Flipped       off
-      LabelPosition west
-      Parameter {
-        Variable      "Ron"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "s_init"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "thermal"
-        Value         ""
-        Show          off
-      }
-      Parameter {
-        Variable      "Rth"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "T_init"
-        Value         ""
-        Show          off
-      }
-    }
-    Component {
-      Type          Inductor
-      Name          "L2"
-      Show          on
-      Position      [1315, 240]
-      Direction     left
-      Flipped       off
-      LabelPosition northNortheast
-      Parameter {
-        Variable      "L"
-        Value         "0.00016"
-        Show          off
-      }
-      Parameter {
-        Variable      "i_init"
-        Value         "0"
-        Show          off
-      }
-    }
-    Component {
-      Type          From
-      Name          "From12"
-      Show          off
-      Position      [1545, 170]
-      Direction     down
-      Flipped       off
-      LabelPosition west
-      Parameter {
-        Variable      "Tag"
-        Value         "GateMosfet1"
-        Show          off
-      }
-      Parameter {
-        Variable      "Visibility"
-        Value         "1"
-        Show          off
-      }
-      Parameter {
-        Variable      "NoMatchingCounterpartAction"
-        Value         "1"
-        Show          off
-      }
-    }
-    Component {
-      Type          From
-      Name          "From13"
-      Show          off
-      Position      [1470, 295]
-      Direction     left
-      Flipped       off
-      LabelPosition north
-      Parameter {
-        Variable      "Tag"
-        Value         "GateMosfet2"
-        Show          off
-      }
-      Parameter {
-        Variable      "Visibility"
-        Value         "1"
-        Show          off
-      }
-      Parameter {
-        Variable      "NoMatchingCounterpartAction"
-        Value         "1"
-        Show          off
-      }
-    }
-    Component {
-      Type          Capacitor
-      Name          "C3"
-      Show          on
-      Position      [1225, 315]
-      Direction     down
-      Flipped       on
-      LabelPosition west
-      Parameter {
-        Variable      "C"
-        Value         "119e-6"
-        Show          off
-      }
-      Parameter {
-        Variable      "v_init"
-        Value         "0"
-        Show          off
-      }
-    }
-    Component {
-      Type          DCVoltageSource
-      Name          "V_dc2"
-      Show          on
-      Position      [1150, 325]
-      Direction     down
-      Flipped       on
-      LabelPosition east
-      Parameter {
-        Variable      "V"
-        Value         "12"
-        Show          off
-      }
-    }
-    Component {
-      Type          Resistor
-      Name          "R5"
-      Show          on
-      Position      [1690, 310]
-      Direction     up
-      Flipped       off
-      LabelPosition east
-      Parameter {
-        Variable      "R"
-        Value         "39.5"
-        Show          off
       }
     }
     Connection {
@@ -1577,6 +1324,7 @@ Plecs {
       Type          Signal
       SrcComponent  "From3"
       SrcTerminal   1
+      Points        [45, 230]
       DstComponent  "S1"
       DstTerminal   3
     }
@@ -1584,6 +1332,7 @@ Plecs {
       Type          Signal
       SrcComponent  "From2"
       SrcTerminal   1
+      Points        [125, 230]
       DstComponent  "S2"
       DstTerminal   3
     }
@@ -1726,86 +1475,6 @@ Plecs {
       SrcTerminal   1
       DstComponent  "Scope1"
       DstTerminal   1
-    }
-    Connection {
-      Type          Signal
-      SrcComponent  "Probe2"
-      SrcTerminal   1
-      DstComponent  "Scope2"
-      DstTerminal   1
-    }
-    Connection {
-      Type          Wire
-      SrcComponent  "MOSFET2"
-      SrcTerminal   2
-      Points        [1430, 240]
-      Branch {
-        DstComponent  "MOSFET1"
-        DstTerminal   2
-      }
-      Branch {
-        DstComponent  "L2"
-        DstTerminal   2
-      }
-    }
-    Connection {
-      Type          Wire
-      SrcComponent  "C3"
-      SrcTerminal   1
-      Points        [1225, 240]
-      Branch {
-        DstComponent  "L2"
-        DstTerminal   1
-      }
-      Branch {
-        Points        [1150, 240]
-        DstComponent  "V_dc2"
-        DstTerminal   1
-      }
-    }
-    Connection {
-      Type          Signal
-      SrcComponent  "From13"
-      SrcTerminal   1
-      DstComponent  "MOSFET2"
-      DstTerminal   3
-    }
-    Connection {
-      Type          Wire
-      SrcComponent  "MOSFET1"
-      SrcTerminal   1
-      Points        [1690, 240]
-      DstComponent  "R5"
-      DstTerminal   1
-    }
-    Connection {
-      Type          Signal
-      SrcComponent  "From12"
-      SrcTerminal   1
-      DstComponent  "MOSFET1"
-      DstTerminal   3
-    }
-    Connection {
-      Type          Wire
-      SrcComponent  "V_dc2"
-      SrcTerminal   2
-      Points        [1150, 395; 1225, 395]
-      Branch {
-        DstComponent  "C3"
-        DstTerminal   2
-      }
-      Branch {
-        Points        [1430, 395]
-        Branch {
-          Points        [1690, 395]
-          DstComponent  "R5"
-          DstTerminal   2
-        }
-        Branch {
-          DstComponent  "MOSFET2"
-          DstTerminal   1
-        }
-      }
     }
     Annotation {
       Name          "<html><body>\n<p>Buck</p></body></html>"
