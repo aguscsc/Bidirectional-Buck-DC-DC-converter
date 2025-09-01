@@ -53,7 +53,7 @@ Plecs {
   ScriptsDialogGeometry ""
   ScriptsDialogSplitterPos "0"
   Schematic {
-    Location      [0, 23; 1536, 773]
+    Location      [0, 26; 1536, 776]
     ZoomFactor    1
     SliderPosition [0, 0]
     ShowBrowser   off
@@ -68,75 +68,7 @@ Plecs {
       LabelPosition east
       Parameter {
         Variable      "V"
-        Value         "24"
-        Show          off
-      }
-    }
-    Component {
-      Type          Mosfet
-      Name          "FET1"
-      Show          on
-      Position      [245, 145]
-      Direction     left
-      Flipped       off
-      LabelPosition north
-      Parameter {
-        Variable      "Ron"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "s_init"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "thermal"
-        Value         ""
-        Show          off
-      }
-      Parameter {
-        Variable      "Rth"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "T_init"
-        Value         ""
-        Show          off
-      }
-    }
-    Component {
-      Type          Mosfet
-      Name          "FET2"
-      Show          on
-      Position      [380, 245]
-      Direction     up
-      Flipped       off
-      LabelPosition east
-      Parameter {
-        Variable      "Ron"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "s_init"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "thermal"
-        Value         ""
-        Show          off
-      }
-      Parameter {
-        Variable      "Rth"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "T_init"
-        Value         ""
+        Value         "23"
         Show          off
       }
     }
@@ -150,7 +82,7 @@ Plecs {
       LabelPosition north
       Parameter {
         Variable      "L"
-        Value         "1e-3"
+        Value         "0.856e-3"
         Show          off
       }
       Parameter {
@@ -169,7 +101,7 @@ Plecs {
       LabelPosition west
       Parameter {
         Variable      "C"
-        Value         "61*10^-6"
+        Value         "1.59e-6"
         Show          off
       }
       Parameter {
@@ -188,7 +120,7 @@ Plecs {
       LabelPosition east
       Parameter {
         Variable      "R"
-        Value         "39.5"
+        Value         "39.2"
         Show          off
       }
     }
@@ -216,7 +148,7 @@ Plecs {
       LabelPosition west
       Parameter {
         Variable      "C"
-        Value         "4.4*10^-6"
+        Value         "6.5e-6"
         Show          off
       }
       Parameter {
@@ -358,7 +290,7 @@ Plecs {
       Frame         [-10, -10; 10, 10]
       Parameter {
         Variable      "Value"
-        Value         "1"
+        Value         "0"
         Show          off
       }
       Parameter {
@@ -990,16 +922,16 @@ Plecs {
       Direction     up
       Flipped       off
       LabelPosition south
-      Location      [0, 26; 1536, 807]
+      Location      [0, 26; 1536, 834]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAADYA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
-"///wAAAGgA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABoAP///wAAAAMAAAAAAAAAAPw"
-"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABQAP///wAABgAAAALyAAAA"
+"///wAAAGgA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABoAP///wAAAAMAAAYAAAAAiPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABgAAAABQAP///wAABgAAAAKBAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "{\"DefaultSecSize\":0,\"FirstSecSize\":157,\"Labels\":[],"
-"\"VisualIdxs\":[]}"
+      HeaderState   "{\"DefaultSecSize\":100,\"FirstSecSize\":157,\"Labels\":["
+"],\"VisualIdxs\":[]}"
       PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
       Axes          "1"
       TimeRange     "0.0"
@@ -1049,7 +981,7 @@ Plecs {
       LabelPosition east
       Parameter {
         Variable      "R"
-        Value         "1"
+        Value         "0.2"
         Show          off
       }
     }
@@ -1063,7 +995,7 @@ Plecs {
       LabelPosition east
       Parameter {
         Variable      "R"
-        Value         "1"
+        Value         "0.2"
         Show          off
       }
     }
@@ -1071,7 +1003,7 @@ Plecs {
       Type          PlecsProbe
       Name          "Probe1"
       Show          on
-      Position      [925, 375]
+      Position      [925, 420]
       Direction     right
       Flipped       off
       LabelPosition south
@@ -1085,15 +1017,15 @@ Plecs {
       Type          Scope
       Name          "Scope1"
       Show          on
-      Position      [980, 375]
+      Position      [990, 420]
       Direction     up
       Flipped       off
       LabelPosition south
-      Location      [0, 26; 1536, 849]
+      Location      [0, 26; 1536, 807]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAC0AAACkPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAADYA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
-"///wAAAGgA////+wAAAAwAVAByAGEAYwBlAHMAAAAAMAAAApAAAABoAP///wAAAAMAAAYAAAAAiPw"
-"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABgAAAABQAP///wAABgAAAAKQAAAA"
+"///wAAAGgA////+wAAAAwAVAByAGEAYwBlAHMAAAAAMAAAApAAAABoAP///wAAAAMAAAYAAAAAYvw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQDAAAAAAAAAs4AAAYAAAAAYgAABgAAAALyAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
@@ -1104,7 +1036,7 @@ Plecs {
       TimeRange     "0.0"
       ScrollingMode "1"
       SingleTimeAxis "1"
-      Open          "1"
+      Open          "0"
       Ts            "-1"
       SampleLimit   "0"
       XAxisLabel    "Time / s"
@@ -1138,36 +1070,104 @@ Plecs {
         }
       }
     }
-    Connection {
-      Type          Wire
-      SrcComponent  "FET1"
-      SrcTerminal   2
-      Points        [380, 145]
-      Branch {
-        DstComponent  "FET2"
-        DstTerminal   1
+    Component {
+      Type          MosfetWithDiode
+      Name          "FETD"
+      Show          on
+      Position      [390, 245]
+      Direction     up
+      Flipped       off
+      LabelPosition east
+      Parameter {
+        Variable      "Ron"
+        Value         "22e-3"
+        Show          off
       }
-      Branch {
-        DstComponent  "L1"
-        DstTerminal   1
+      Parameter {
+        Variable      "s_init"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "thermal"
+        Value         ""
+        Show          off
+      }
+      Parameter {
+        Variable      "Rth"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "T_init"
+        Value         ""
+        Show          off
+      }
+    }
+    Component {
+      Type          MosfetWithDiode
+      Name          "FETD1"
+      Show          on
+      Position      [245, 145]
+      Direction     left
+      Flipped       off
+      LabelPosition north
+      Parameter {
+        Variable      "Ron"
+        Value         "22e-3"
+        Show          off
+      }
+      Parameter {
+        Variable      "s_init"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "thermal"
+        Value         ""
+        Show          off
+      }
+      Parameter {
+        Variable      "Rth"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "T_init"
+        Value         ""
+        Show          off
       }
     }
     Connection {
       Type          Wire
-      SrcComponent  "FET2"
+      SrcComponent  "V_dc"
       SrcTerminal   2
-      Points        [380, 300]
+      Points        [65, 300; 145, 300]
       Branch {
         Points        [200, 300]
         Branch {
-          Points        [145, 300]
+          Points        [390, 300]
           Branch {
-            Points        [65, 300]
-            DstComponent  "V_dc"
-            DstTerminal   2
+            Points        [585, 300]
+            Branch {
+              DstComponent  "C1"
+              DstTerminal   2
+            }
+            Branch {
+              Points        [670, 300]
+              Branch {
+                DstComponent  "R1"
+                DstTerminal   2
+              }
+              Branch {
+                Points        [755, 300]
+                DstComponent  "V_dc1"
+                DstTerminal   2
+              }
+            }
           }
           Branch {
-            DstComponent  "R2"
+            DstComponent  "FETD"
             DstTerminal   2
           }
         }
@@ -1177,23 +1177,8 @@ Plecs {
         }
       }
       Branch {
-        Points        [585, 300]
-        Branch {
-          DstComponent  "C1"
-          DstTerminal   2
-        }
-        Branch {
-          Points        [670, 300]
-          Branch {
-            DstComponent  "R1"
-            DstTerminal   2
-          }
-          Branch {
-            Points        [755, 300]
-            DstComponent  "V_dc1"
-            DstTerminal   2
-          }
-        }
+        DstComponent  "R2"
+        DstTerminal   2
       }
     }
     Connection {
@@ -1235,24 +1220,23 @@ Plecs {
     }
     Connection {
       Type          Wire
-      SrcComponent  "FET1"
-      SrcTerminal   1
-      Points        [200, 145]
+      SrcComponent  "S1"
+      SrcTerminal   2
+      Points        [65, 145; 145, 145]
       Branch {
-        Points        [145, 145]
+        Points        [200, 145]
         Branch {
-          Points        [65, 145]
-          DstComponent  "S1"
-          DstTerminal   2
+          DstComponent  "R4"
+          DstTerminal   1
         }
         Branch {
-          DstComponent  "S2"
-          DstTerminal   2
+          DstComponent  "FETD1"
+          DstTerminal   1
         }
       }
       Branch {
-        DstComponent  "R4"
-        DstTerminal   1
+        DstComponent  "S2"
+        DstTerminal   2
       }
     }
     Connection {
@@ -1436,20 +1420,6 @@ Plecs {
     }
     Connection {
       Type          Signal
-      SrcComponent  "From8"
-      SrcTerminal   1
-      DstComponent  "FET2"
-      DstTerminal   3
-    }
-    Connection {
-      Type          Signal
-      SrcComponent  "From4"
-      SrcTerminal   1
-      DstComponent  "FET1"
-      DstTerminal   3
-    }
-    Connection {
-      Type          Signal
       SrcComponent  "Probe"
       SrcTerminal   1
       DstComponent  "Scope"
@@ -1476,6 +1446,34 @@ Plecs {
       DstComponent  "Scope1"
       DstTerminal   1
     }
+    Connection {
+      Type          Signal
+      SrcComponent  "From8"
+      SrcTerminal   1
+      DstComponent  "FETD"
+      DstTerminal   3
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "L1"
+      SrcTerminal   1
+      Points        [390, 145]
+      Branch {
+        DstComponent  "FETD"
+        DstTerminal   1
+      }
+      Branch {
+        DstComponent  "FETD1"
+        DstTerminal   2
+      }
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "From4"
+      SrcTerminal   1
+      DstComponent  "FETD1"
+      DstTerminal   3
+    }
     Annotation {
       Name          "<html><body>\n<p>Buck</p></body></html>"
       Position      [145, 555]
@@ -1494,11 +1492,21 @@ Plecs {
     } 
     Annotation {
       Name          "<html><body>\n<p>Modo buck</p>\n<p> </p></body></html>"
-      Position      [930, 240]
+      Position      [1040, 235]
     } 
     Annotation {
       Name          "<html><body>\n<p>Modo boost</p>\n<p> </p></body></html>"
-      Position      [940, 335]
+      Position      [1035, 350]
+    } 
+    Annotation {
+      Name          "<html><body>\n<p>Vimin=23[V]</p>\n<p>Vomax=14[V]</p></bod"
+"y></html>"
+      Position      [1090, 290]
+    } 
+    Annotation {
+      Name          "<html><body>\n<p>Vimin=12[V]</p>\n<p>Vomax=27[V]</p></bod"
+"y></html>"
+      Position      [1090, 435]
     } 
   }
 }
