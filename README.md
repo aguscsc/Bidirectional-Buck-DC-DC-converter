@@ -60,8 +60,6 @@ Diagram (preliminary):
 - [ ] PCB design and layout  
 - [ ] Firmware integration (ESP32 control)  
 - [ ] Experimental validation
-- [ ] optoacoplador
-
 ---
 
 ## 👥 Collaborators
