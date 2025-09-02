@@ -760,7 +760,7 @@ Plecs {
       Type          SignalSwitch
       Name          "Switch"
       Show          on
-      Position      [780, 575]
+      Position      [685, 625]
       Direction     right
       Flipped       off
       LabelPosition south
@@ -779,7 +779,7 @@ Plecs {
       Type          SignalSwitch
       Name          "Switch1"
       Show          on
-      Position      [485, 660]
+      Position      [490, 535]
       Direction     right
       Flipped       off
       LabelPosition south
@@ -798,7 +798,7 @@ Plecs {
       Type          From
       Name          "From6"
       Show          off
-      Position      [485, 610]
+      Position      [490, 485]
       Direction     down
       Flipped       off
       LabelPosition west
@@ -822,7 +822,7 @@ Plecs {
       Type          From
       Name          "From7"
       Show          off
-      Position      [780, 530]
+      Position      [685, 580]
       Direction     down
       Flipped       off
       LabelPosition west
@@ -846,7 +846,7 @@ Plecs {
       Type          Goto
       Name          "Goto3"
       Show          off
-      Position      [885, 575]
+      Position      [790, 625]
       Direction     right
       Flipped       off
       LabelPosition south
@@ -870,7 +870,7 @@ Plecs {
       Type          Goto
       Name          "Goto4"
       Show          off
-      Position      [575, 660]
+      Position      [580, 535]
       Direction     right
       Flipped       off
       LabelPosition south
@@ -1138,6 +1138,77 @@ Plecs {
         Show          off
       }
     }
+    Component {
+      Type          PlecsProbe
+      Name          "Probe2"
+      Show          on
+      Position      [925, 530]
+      Direction     right
+      Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "L1"
+        Path          ""
+        Signals       {"Inductor current"}
+      }
+    }
+    Component {
+      Type          Scope
+      Name          "Scope2"
+      Show          on
+      Position      [1005, 530]
+      Direction     up
+      Flipped       off
+      LabelPosition south
+      Location      [0, 26; 1536, 816]
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAC0AAACkPwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAADYA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
+"///wAAAGgA////+wAAAAwAVAByAGEAYwBlAHMAAAAAMAAAApAAAABoAP///wAAAAMAAAYAAAAAYvw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQDAAAAAAAAAs4AAAYAAAAAXQAABgAAAAL7AAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "{\"DefaultSecSize\":0,\"FirstSecSize\":157,\"Labels\":[\""
+"Delta\"],\"VisualIdxs\":[3]}"
+      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      Axes          "1"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "0"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    "Time / s"
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency / Hz"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
     Connection {
       Type          Wire
       SrcComponent  "V_dc"
@@ -1353,7 +1424,7 @@ Plecs {
         DstTerminal   1
       }
       Branch {
-        Points        [425, 665]
+        Points        [425, 540]
         DstComponent  "Switch1"
         DstTerminal   3
       }
@@ -1362,7 +1433,7 @@ Plecs {
       Type          Signal
       SrcComponent  "Sum1"
       SrcTerminal   1
-      Points        [750, 360]
+      Points        [655, 360]
       DstComponent  "Switch"
       DstTerminal   3
     }
@@ -1377,7 +1448,7 @@ Plecs {
         DstTerminal   1
       }
       Branch {
-        Points        [110, 570]
+        Points        [110, 620]
         DstComponent  "Switch"
         DstTerminal   2
       }
@@ -1386,7 +1457,7 @@ Plecs {
       Type          Signal
       SrcComponent  "Sum"
       SrcTerminal   1
-      Points        [265, 375; 265, 655]
+      Points        [265, 375; 265, 530]
       DstComponent  "Switch1"
       DstTerminal   2
     }
@@ -1474,6 +1545,13 @@ Plecs {
       DstComponent  "FETD1"
       DstTerminal   3
     }
+    Connection {
+      Type          Signal
+      SrcComponent  "Probe2"
+      SrcTerminal   1
+      DstComponent  "Scope2"
+      DstTerminal   1
+    }
     Annotation {
       Name          "<html><body>\n<p>Buck</p></body></html>"
       Position      [145, 555]
@@ -1506,7 +1584,11 @@ Plecs {
     Annotation {
       Name          "<html><body>\n<p>Vimin=12[V]</p>\n<p>Vomax=27[V]</p></bod"
 "y></html>"
-      Position      [1090, 435]
+      Position      [1085, 420]
+    } 
+    Annotation {
+      Name          "<html><body>\n<p>Inductor</p></body></html>"
+      Position      [1000, 485]
     } 
   }
 }
