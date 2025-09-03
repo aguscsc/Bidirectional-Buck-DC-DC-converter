@@ -33,10 +33,10 @@ Il_satmin= round(2*max(ipk_boost,ipk_buck));
 %% capacitor
 % 5% de ripple
 %buck
-C_buck= (delta_il_buck)/(8*frec*0.05)
+C_buck= (delta_il_buck)/(8*frec*0.01)
 %buck
 iout=5/27;
-C_boost= (iout)/(frec*0.05)
+C_boost= (iout)/(frec*0.01)
 %% vpulse
 frec=60000;
 gap = 200*10^(-9);
@@ -47,6 +47,9 @@ pw2_buck=periodo-pw_buck-gap;
 %boost
 pw_boost=periodo*dutymax_boost-gap;
 pw2_boost=periodo-pw_boost-gap;
+
+%% MOSFET calc
+
 
 %% referencias
 
