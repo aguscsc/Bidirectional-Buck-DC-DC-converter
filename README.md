@@ -59,8 +59,7 @@ Diagram (preliminary):
 - [ ] Component selection  
 - [ ] PCB design and layout  
 - [ ] Firmware integration (ESP32 control)  
-- [ ] Experimental validation  
-
+- [ ] Experimental validation
 ---
 
 ## 👥 Collaborators
@@ -73,4 +72,5 @@ Diagram (preliminary):
 ## 📚 References
 -   Mohan – Power Electronics, Cap. 7
 -   Erickson – Fundamentals of Power Electronics, Cap. 3
--  Power Electronics: Converters, Applications, and Design” – Ned Mohan
+-   Power Electronics: Converters, Applications, and Design” – Ned Mohan
+-   Electronica de Potencia, 1era edicion - Daniel W.Hart
