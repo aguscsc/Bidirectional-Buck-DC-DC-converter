@@ -53,6 +53,17 @@ Diagram (preliminary):
   where:
   - \( $\Delta V$ \) = allowed voltage ripple  
 
+## Simulation/PCB layout
+-Proteus
+<p>
+  <img src="pics/proteus_sim.png" alt="proteus" width="600"/>
+</p>
+-Kicad
+
+<p>
+  <img src="pics/kicad_first_try.png" alt="kicad" width="600"/>
+</p>
+
 ---
 
 ## ✅ TODO 
