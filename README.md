@@ -66,9 +66,7 @@ Diagram (preliminary):
 
 ---
 
-## ✅ TODO 
-- [ ] Component selection  
-- [ ] PCB design and layout  
+## ✅ TODO   
 - [ ] Firmware integration (ESP32 control)  
 - [ ] Experimental validation
 ---
