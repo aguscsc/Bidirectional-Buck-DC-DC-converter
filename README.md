@@ -83,3 +83,4 @@ Diagram (preliminary):
 -   Erickson – Fundamentals of Power Electronics, Cap. 3
 -   Power Electronics: Converters, Applications, and Design” – Ned Mohan
 -   Electronica de Potencia, 1era edicion - Daniel W.Hart
+-
