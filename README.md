@@ -4,7 +4,7 @@ This repository documents the design and implementation of a **bidirectional DC-
 The system can operate in both **buck mode** (step-down) and **boost mode** (step-up), enabling power flow in both directions.  
 
 ---
-## Sofware used
+## Software used
 - **Simulation**
   
    Multisim, Ltspice and MATLAB/Simulink
@@ -53,15 +53,13 @@ Diagram (preliminary):
   where:
   - \( $\Delta V$ \) = allowed voltage ripple  
 
-## Simulation/PCB layout
--Proteus
+## schematic & PCB layout
 <p>
-  <img src="pics/proteus_sim.png" alt="proteus" width="600"/>
+  <img src="pics/kicad_ss.png" alt="proteus" width="600"/>
 </p>
--Kicad
 
 <p>
-  <img src="pics/kicad_first_try.png" alt="kicad" width="600"/>
+  <img src="pics/pcb_ss.png" alt="kicad" width="600"/>
 </p>
 
 ---
