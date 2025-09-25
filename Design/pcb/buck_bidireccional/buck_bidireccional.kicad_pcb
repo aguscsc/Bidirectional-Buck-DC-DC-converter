@@ -11323,7 +11323,7 @@
 			(justify left bottom)
 		)
 	)
-	(gr_text "SQ1\n"
+	(gr_text "DQ1\n"
 		(at 110.5 102.5 90)
 		(layer "F.SilkS")
 		(uuid "d626b027-cc2c-43eb-b0e8-5ea8d85c45fa")
