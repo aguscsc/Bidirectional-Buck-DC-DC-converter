@@ -82,3 +82,58 @@ print(df.round(3))
 
 efficiency= (5 - df.iloc[-1]["Power_W"])/5
 print(f"{efficiency:.2%}","efficiency")
+
+# ---------- BOOST MODE BLOCK ----------
+# Use your existing variables: Vin, Vo, fs, D, Iout, diL, etc.
+
+# 1) Inductor average & RMS in boost
+IL_avg_boost = (Vo/Vin) * Iout         # = Iin
+IL_rms_boost = (IL_avg_boost**2 + (diL**2)/12.0)**0.5
+
+# 2) Device RMS currents (LS = main switch, HS = synchronous)
+I_LS_rms_boost = (D**0.5) * IL_rms_boost
+I_HS_rms_boost = ((1-D)**0.5) * IL_rms_boost
+
+# 3) Conduction losses (use your Rds_on_typ or hot)
+P_LS_cond_boost = I_LS_rms_boost**2 * Rds_on_typ
+P_HS_cond_boost = I_HS_rms_boost**2 * Rds_on_typ
+
+# 4) Switching losses
+# Main switch (LS) switches ~Vo
+P_LS_sw_boost = 0.5 * Vo * IL_avg_boost * tr_tf * fs
+# Sync (HS) switching is usually small; set to 0 or estimate with (Vo - Vin)
+P_HS_sw_boost = 0.0  # or: 0.5 * (Vo - Vin) * IL_avg_boost * tr_tf * fs
+
+# 5) Deadtime diode on HS device
+P_HS_dt_boost = 2 * IL_avg_boost * Vf_body * t_dead * fs
+
+# 6) Gate-drive (same Qg·Vgs·fs per FET)
+P_gates_boost = 2 * Qg * Vgs * fs
+
+# 7) Capacitors & inductor copper (boost-side approximations)
+ICout_rms_boost = Iout * (D/(1-D))**0.5
+ICin_rms_boost = diL/(2*(3**0.5))  # conservative
+P_L_cu_boost = IL_rms_boost**2 * R_L_DCR
+P_Cout_boost = ICout_rms_boost**2 * ESR_out
+P_Cin_boost = ICin_rms_boost**2 * ESR_in
+
+rows_boost = [
+    ["[BOOST] LS MOSFET conduction", P_LS_cond_boost],
+    ["[BOOST] HS MOSFET conduction", P_HS_cond_boost],
+    ["[BOOST] LS MOSFET switching", P_LS_sw_boost],
+    ["[BOOST] HS body diode (deadtime)", P_HS_dt_boost],
+    ["[BOOST] Gate drive (both)", P_gates_boost],
+    ["[BOOST] Inductor copper (DCR)", P_L_cu_boost],
+    ["[BOOST] Output cap ESR", P_Cout_boost],
+    ["[BOOST] Input cap ESR", P_Cin_boost],
+]
+
+df_boost = pd.DataFrame(rows_boost, columns=["Component / Mechanism", "Power_W"])
+df_boost["Power_mW"] = 1000*df_boost["Power_W"]
+df_boost.loc["TOTAL"] = ["[BOOST] TOTAL", df_boost["Power_W"].sum(), df_boost["Power_mW"].sum()]
+
+print(df_boost.round(3))
+
+# Efficiency in boost at the same 5 W output:
+eff_boost = (5 - df_boost.iloc[-1]["Power_W"]) / 5
+print(f"{eff_boost:.2%}", "efficiency (boost)")
