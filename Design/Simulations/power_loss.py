@@ -5,11 +5,6 @@ Vin = 23.0
 Vo = 14.0
 fs = 60_000.0
 D = 0.609
-# Boost mode
-#Vin = 12.0
-#Vo = 27.0
-#fs = 60_000.0
-#D = 0.555
 Iout = 0.357
 diL = 0.107
 IL_rms = (Iout**2 + (diL**2)/12)**0.5
@@ -53,11 +48,6 @@ P_L_cu = IL_rms**2 * R_L_DCR
 P_Cout = ICout_rms**2 * ESR_out
 P_Cin = ICin_rms**2 * ESR_in    
 
-# pull up & pull down
-#R1 = 10_000.0
-#R6 = 10_000.0
-#P_R1 = (12.0**2)/R1
-#P_R6 = (V_in_logic**2)/R6
 
 rows = [
     ["HS MOSFET conduction", P_HS_cond],
@@ -70,8 +60,6 @@ rows = [
     ["Input cap ESR (C1)", P_Cin],
     ["Pull-down R4 (10k)", P_R4],
     ["Pull-down R5 (10k)", P_R5],
-    #["R1 (10k @12V)", P_R1],
-    #["R6 (10k @5V)", P_R6],
 ]
 
 df = pd.DataFrame(rows, columns=["Component / Mechanism", "Power_W"])
