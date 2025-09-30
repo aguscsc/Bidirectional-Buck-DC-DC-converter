@@ -67,6 +67,13 @@ Diagram (preliminary):
 ## ✅ TODO   
 - [ ] Firmware integration (ESP32 control)  
 - [ ] Experimental validation
+PPT:
+- [ ] Ingenieria basica
+- [ ] Eleccion de nucleo y explicaciones del tipo de inductor
+- [ ] Tecnologia del capacitor
+- [ ] Frecuencia de corte del circuito
+- [ ] Calculos de ESR
+- [ ] Colocar en que nivel estamos
 ---
 
 ## 👥 Collaborators
