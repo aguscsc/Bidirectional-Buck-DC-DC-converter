@@ -2184,12 +2184,6 @@
 		(uuid "07c75d46-1543-4bc9-8f9b-af73edfa803f")
 	)
 	(junction
-		(at 189.23 88.9)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "0f08e630-c283-48c6-a7f2-95a85851d843")
-	)
-	(junction
 		(at 194.31 66.04)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2242,12 +2236,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "6a5cf883-57dd-49ea-9699-8e05009952ec")
-	)
-	(junction
-		(at 186.69 72.39)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6aad5ff9-972a-4a0b-92bd-7ebaf01c9cd2")
 	)
 	(junction
 		(at 154.94 76.2)
@@ -2417,16 +2405,6 @@
 	)
 	(wire
 		(pts
-			(xy 189.23 63.5) (xy 189.23 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "173d1e1c-b5e5-47ff-abfb-4c53da277885")
-	)
-	(wire
-		(pts
 			(xy 73.66 110.49) (xy 86.36 110.49)
 		)
 		(stroke
@@ -2577,7 +2555,7 @@
 	)
 	(wire
 		(pts
-			(xy 184.15 88.9) (xy 189.23 88.9)
+			(xy 184.15 88.9) (xy 194.31 88.9)
 		)
 		(stroke
 			(width 0)
@@ -2747,16 +2725,6 @@
 	)
 	(wire
 		(pts
-			(xy 189.23 88.9) (xy 194.31 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6c6e3e39-7399-4994-a10f-27713f8cf8c0")
-	)
-	(wire
-		(pts
 			(xy 66.04 64.77) (xy 72.39 64.77)
 		)
 		(stroke
@@ -2914,16 +2882,6 @@
 			(type default)
 		)
 		(uuid "a31bc7ff-75d6-436b-8146-01aff449e550")
-	)
-	(wire
-		(pts
-			(xy 186.69 63.5) (xy 186.69 72.39)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a73ca8ee-1d40-4628-b81c-72ffc05edc02")
 	)
 	(wire
 		(pts
@@ -4518,75 +4476,6 @@
 			(project "buck_bidireccional"
 				(path "/a506e00b-eae2-41ca-a9b6-22a3d546bb26"
 					(reference "R5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x02_Pin")
-		(at 189.23 58.42 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "696d28c6-3698-42c0-b888-42871082dc29")
-		(property "Reference" "Vgs_Q1"
-			(at 177.038 62.23 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Conn_01x02_Pin"
-			(at 181.864 55.626 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
-			(at 189.23 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 189.23 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x02, script generated"
-			(at 189.23 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "53cc8c31-bc43-41f8-8212-3d2788ab8bf1")
-		)
-		(pin "2"
-			(uuid "14ebda72-8e0d-4450-8f6c-2ff635fb3e48")
-		)
-		(instances
-			(project "buck_bidireccional"
-				(path "/a506e00b-eae2-41ca-a9b6-22a3d546bb26"
-					(reference "Vgs_Q1")
 					(unit 1)
 				)
 			)

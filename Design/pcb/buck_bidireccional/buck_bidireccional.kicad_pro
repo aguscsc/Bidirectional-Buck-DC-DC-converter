@@ -502,7 +502,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "../../../../../../Desktop/pcbway/",
+      "plot": "./",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",
