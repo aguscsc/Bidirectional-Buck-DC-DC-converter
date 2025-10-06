@@ -5,9 +5,18 @@ Vin = 23.0
 Vo = 14.0
 fs = 60_000.0
 D = 0.609
+D2 = 0.555
 Iout = 0.357
 diL = 0.107
 IL_rms = (Iout**2 + (diL**2)/12)**0.5
+# Boost mode
+Vin2 = 12.0
+Vo2 = 27.0
+fs2 = 60_000.0
+D2 = 0.555
+Iout2 = 5.0/27.0
+diL = 0.107
+IL_rms2 = (Iout2**2 + (diL**2)/12)**0.5
 
 
 # Assumptions 
@@ -19,8 +28,8 @@ Vf_body = 0.7         # body diode drop (low-side during deadtime)
 Rds_on_typ = 0.015    # 15 mΩ (typ at 10V)
 Rds_on_hot = 0.025    # rough hot value
 R_L_DCR = 0.25        # Inductor DCR (Ohm) assumption
-ESR_out = 0.144        # Output cap ESR (Ohm) assumption (THT electrolytic/small film)
-ESR_in = 0.046810     # Input cap ESR (Ohm) assumption (small radial electrolytic)
+ESR_out = 0.144        # Output cap ESR (Ohm) 
+ESR_in = 0.046810     # Input cap ESR (Ohm) 
 R_g_HS = 10.0         # Gate resistor HS
 R_g_LS = 10.0         # Gate resistor LS
 R_pull = 10_000.0     # R4, R5
@@ -75,12 +84,12 @@ print(f"{efficiency:.2%}","efficiency")
 # Use your existing variables: Vin, Vo, fs, D, Iout, diL, etc.
 
 # 1) Inductor average & RMS in boost
-IL_avg_boost = (Vo/Vin) * Iout         # = Iin
+IL_avg_boost = (Vo2/Vin2) * Iout2         # = Iin
 IL_rms_boost = (IL_avg_boost**2 + (diL**2)/12.0)**0.5
 
 # 2) Device RMS currents (LS = main switch, HS = synchronous)
-I_LS_rms_boost = (D**0.5) * IL_rms_boost
-I_HS_rms_boost = ((1-D)**0.5) * IL_rms_boost
+I_LS_rms_boost = (D2**0.5) * IL_rms_boost
+I_HS_rms_boost = ((1-D2)**0.5) * IL_rms_boost
 
 # 3) Conduction losses (use your Rds_on_typ or hot)
 P_LS_cond_boost = I_LS_rms_boost**2 * Rds_on_typ
@@ -88,7 +97,7 @@ P_HS_cond_boost = I_HS_rms_boost**2 * Rds_on_typ
 
 # 4) Switching losses
 # Main switch (LS) switches ~Vo
-P_LS_sw_boost = 0.5 * Vo * IL_avg_boost * tr_tf * fs
+P_LS_sw_boost = 0.5 * Vo2 * IL_avg_boost * tr_tf * fs
 # Sync (HS) switching is usually small; set to 0 or estimate with (Vo - Vin)
 P_HS_sw_boost = 0.0  # or: 0.5 * (Vo - Vin) * IL_avg_boost * tr_tf * fs
 
@@ -99,11 +108,11 @@ P_HS_dt_boost = 2 * IL_avg_boost * Vf_body * t_dead * fs
 P_gates_boost = 2 * Qg * Vgs * fs
 
 # 7) Capacitors & inductor copper (boost-side approximations)
-ICout_rms_boost = Iout * (D/(1-D))**0.5
+ICout_rms_boost = Iout2 * (D2/(1-D2))**0.5
 ICin_rms_boost = diL/(2*(3**0.5))  # conservative
 P_L_cu_boost = IL_rms_boost**2 * R_L_DCR
-P_Cout_boost = ICout_rms_boost**2 * ESR_out
-P_Cin_boost = ICin_rms_boost**2 * ESR_in
+P_Cout_boost = ICout_rms_boost**2 * ESR_in
+P_Cin_boost = ICin_rms_boost**2 * ESR_out
 
 rows_boost = [
     ["[BOOST] LS MOSFET conduction", P_LS_cond_boost],
@@ -114,6 +123,8 @@ rows_boost = [
     ["[BOOST] Inductor copper (DCR)", P_L_cu_boost],
     ["[BOOST] Output cap ESR", P_Cout_boost],
     ["[BOOST] Input cap ESR", P_Cin_boost],
+    ["Pull-down R4 (10k)", P_R4],
+    ["Pull-down R5 (10k)", P_R5]
 ]
 
 df_boost = pd.DataFrame(rows_boost, columns=["Component / Mechanism", "Power_W"])
