@@ -78,6 +78,7 @@ df.loc["TOTAL"] = ["TOTAL", df["Power_W"].sum(), df["Power_mW"].sum()]
 print(df.round(3))
 
 efficiency= (5 - df.iloc[-1]["Power_W"])/5
+print("expected output: ",f"{(5 - df.iloc[-1]["Power_W"]):.4} W")
 print(f"{efficiency:.2%}","efficiency")
 
 # ---------- BOOST MODE BLOCK ----------
@@ -135,4 +136,5 @@ print(df_boost.round(3))
 
 # Efficiency in boost at the same 5 W output:
 eff_boost = (5 - df_boost.iloc[-1]["Power_W"]) / 5
+print("expected output: ",f"{(5 - df_boost.iloc[-1]["Power_W"]):.4} W")
 print(f"{eff_boost:.2%}", "efficiency (boost)")
