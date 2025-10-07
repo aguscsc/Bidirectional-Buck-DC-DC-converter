@@ -67,8 +67,6 @@ rows = [
     ["Inductor copper (DCR)", P_L_cu],
     ["Output cap ESR (C2)", P_Cout],
     ["Input cap ESR (C1)", P_Cin],
-    ["Pull-down R4 (10k)", P_R4],
-    ["Pull-down R5 (10k)", P_R5],
 ]
 
 df = pd.DataFrame(rows, columns=["Component / Mechanism", "Power_W"])
@@ -123,9 +121,7 @@ rows_boost = [
     ["[BOOST] Gate drive (both)", P_gates_boost],
     ["[BOOST] Inductor copper (DCR)", P_L_cu_boost],
     ["[BOOST] Output cap ESR", P_Cout_boost],
-    ["[BOOST] Input cap ESR", P_Cin_boost],
-    ["Pull-down R4 (10k)", P_R4],
-    ["Pull-down R5 (10k)", P_R5]
+    ["[BOOST] Input cap ESR", P_Cin_boost]
 ]
 
 df_boost = pd.DataFrame(rows_boost, columns=["Component / Mechanism", "Power_W"])
