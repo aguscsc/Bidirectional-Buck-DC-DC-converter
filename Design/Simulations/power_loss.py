@@ -28,8 +28,8 @@ Vf_body = 0.7         # body diode drop (low-side during deadtime)
 Rds_on_typ = 0.015    # 15 mΩ (typ at 10V)
 Rds_on_hot = 0.025    # rough hot value
 R_L_DCR = 0.25        # Inductor DCR (Ohm) assumption
-ESR_out = 0.144        # Output cap ESR (Ohm) 
-ESR_in = 0.046810     # Input cap ESR (Ohm) 
+ESR_out = 4.5         # Output cap ESR (Ohm) 
+ESR_in = 2            # Input cap ESR (Ohm) 
 R_g_HS = 10.0         # Gate resistor HS
 R_g_LS = 10.0         # Gate resistor LS
 R_pull = 10_000.0     # R4, R5
@@ -117,8 +117,8 @@ rows_boost = [
     ["[BOOST] LS MOSFET conduction", P_LS_cond_boost],
     ["[BOOST] HS MOSFET conduction", P_HS_cond_boost],
     ["[BOOST] LS MOSFET switching", P_LS_sw_boost],
-   # ["[BOOST] HS body diode (deadtime)", P_HS_dt_boost],
-    ["[BOOST] Gate drive (both)", P_gates_boost],
+    ["[BOOST] HS body diode (deadtime)", P_HS_dt_boost],
+    #["[BOOST] Gate drive (both)", P_gates_boost],
     ["[BOOST] Inductor copper (DCR)", P_L_cu_boost],
     ["[BOOST] Output cap ESR", P_Cout_boost],
     ["[BOOST] Input cap ESR", P_Cin_boost]
