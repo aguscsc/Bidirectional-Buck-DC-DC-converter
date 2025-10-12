@@ -55,7 +55,7 @@ Diagram (preliminary):
 
 ## Schematic & PCB layout
 <p>
-  <img src="pics/kicadss2.png" alt="schematic" width="600"/>
+  <img src="pics/kicad_ss.png" alt="schematic" width="600"/>
 </p>
 
 <p>
