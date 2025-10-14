@@ -65,6 +65,9 @@ Diagram (preliminary):
 ---
 
 ## ✅ TODO   
+- [ ] PIC32 control
+- [ ] iron powder inductor test
+- [ ] graphic interface
 - [ ] Firmware integration (ESP32 control)  
 - [ ] Experimental validation
 ---
