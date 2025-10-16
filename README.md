@@ -56,7 +56,7 @@ Diagram (preliminary):
 
 ## Schematic & PCB layout
 <p>
-  <img src="pics/kicadss2.png" alt="schematic" width="600"/>
+  <img src="pics/kicad_ss.png" alt="schematic" width="600"/>
 </p>
 
 <p>
@@ -66,15 +66,11 @@ Diagram (preliminary):
 ---
 
 ## ✅ TODO   
+- [ ] PIC32 control
+- [ ] iron powder inductor test
+- [ ] graphic interface
 - [ ] Firmware integration (ESP32 control)  
 - [ ] Experimental validation
-PPT:
-- [ ] Ingenieria basica
-- [ ] Eleccion de nucleo y explicaciones del tipo de inductor
-- [ ] Tecnologia del capacitor
-- [ ] Frecuencia de corte del circuito
-- [ ] Calculos de ESR
-- [ ] Colocar en que nivel estamos
 ---
 
 ## 👥 Collaborators
