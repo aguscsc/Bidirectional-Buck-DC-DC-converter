@@ -8,6 +8,7 @@ The system can operate in both **buck mode** (step-down) and **boost mode** (ste
 - **Simulation**
   
    Multisim, Ltspice and MATLAB/Simulink
+   coil64
 - **PCB**
   
    Kicad
