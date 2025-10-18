@@ -42,7 +42,16 @@ Diagram (preliminary):
   - \( $V_L$ \) = inductor voltage  
   - \( $D$ \) = duty cycle  
   - \( $\Delta I_L$ \) = current ripple (≈ $30$% of \( $I_{L,max}$ \))  
-  - \( $f_s$ \) = switching frequency  
+  - \( $f_s$ \) = switching frequency
+  
+   $I_{sat} = \frac{B_{sat}\cdot l}{\mu_{0}\cdot \mu_{r}\cdot N}$
+  Where:
+  - \(I_{sat}\) = Saturation current
+  - \(B_{sat}\) = saturation flux density of the core material
+  - \(l\) = effective magnetic path lenght of the core
+  - \(\mu_{0}\) = permeability of a vacuum
+  - \(\mu_{r}\) = relative permeability of the material
+  - \(N\) = number of turns
 
 ### Capacitor
 - To be dimensioned from capacitor current balance:
@@ -64,10 +73,19 @@ Diagram (preliminary):
 </p>
 
 ---
+# Prototyping 
+This section breaksdown the process of prototyping and testing, the pcb in the design directory contains all the mesaures necessary to ensure the converter is working properly (value of components can be adjusted to your needs).
+## BOM:
+- 2 electrolytic capacitors $6.8\mu F$ and $2.2\mu F$ 50V each. 
+- 2 ceramic capacitors (100nF).
+- core T106-26 + 9m of AWG 26 cable (higher permeability would also work if the saturation stays sensible).
+- 2 IFRZ44N (great for prototyping and testing)
+- IR2184 driver (it can generate both MOSFET signals)
+- 2 10 ohm gate resistors 1W (it limits the gate current)
+- 2 10k ohm pulldown resistor 1W (drains the gate source capacitance)
 
 ## ✅ TODO   
 - [ ] PIC32 control
-- [ ] iron powder inductor test
 - [ ] graphic interface
 - [ ] Firmware integration (ESP32 control)  
 - [ ] Experimental validation
