@@ -95,6 +95,7 @@ First, you ought to make sure the MOSFET are conmutating correctly. For this, tu
 <p>
   <img src="pics/gcurrent.png" alt="PCB" width="600"/>
 </p>
+
 ### Powering the circuit
 Check the waveforms of the inductor current and output voltage, ideally you should be looking at two saw-like waves with minimal ripple.
 ![testing](pics/oscilloscoping.jpg)
