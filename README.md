@@ -8,6 +8,7 @@ The system can operate in both **buck mode** (step-down) and **boost mode** (ste
 - **Simulation**
   
    Multisim, Ltspice and MATLAB/Simulink
+   coil64
 - **PCB**
   
    Kicad
@@ -41,8 +42,18 @@ Diagram (preliminary):
   - \( $V_L$ \) = inductor voltage  
   - \( $D$ \) = duty cycle  
   - \( $\Delta I_L$ \) = current ripple (≈ $30$% of \( $I_{L,max}$ \))  
-  - \( $f_s$ \) = switching frequency  
+  - \( $f_s$ \) = switching frequency
+  
+   $I_{sat} = \frac{B_{sat}\cdot l}{\mu_{0}\cdot \mu_{r}\cdot N}$
+  Where:
+  - \($I_{sat}$\) = Saturation current
+  - \($B_{sat}$\) = saturation flux density of the core material
+  - \($l$\) = effective magnetic path lenght of the core
+  - \($\mu_{0}$\) = permeability of a vacuum
+  - \($\mu_{r}$\) = relative permeability of the material
+  - \($N$\) = number of turns
 
+Recomendation: use coil64 to check your calculations.
 ### Capacitor
 - To be dimensioned from capacitor current balance:
 - buck
@@ -55,7 +66,7 @@ Diagram (preliminary):
 
 ## Schematic & PCB layout
 <p>
-  <img src="pics/kicadss2.png" alt="schematic" width="600"/>
+  <img src="pics/kicad_ss.png" alt="schematic" width="600"/>
 </p>
 
 <p>
@@ -63,17 +74,42 @@ Diagram (preliminary):
 </p>
 
 ---
+# Prototyping 
+This section breaks down the process of prototyping and testing, the pcb in the design directory contains all the mesaures necessary to ensure the converter is working properly (value of components can be adjusted to your needs).
+## BOM:
+- 2 electrolytic capacitors $6.8\mu F$ and $2.2\mu F$ 50V each. 
+- 2 ceramic capacitors (100nF).
+- core T106-26 + 9m of AWG 26 cable (higher permeability would also work if the saturation stays sensible).
+- 2 IFRZ44N (great for prototyping and testing)
+- IR2184 driver (it can generate both MOSFET signals)
+- 2 10 ohm gate resistors 1W (it limits the gate current)
+- 2 10k ohm pulldown resistor 1W (drains the gate source capacitance)
+ ![Prototype](pics/bucksito_labeled.jpg)
+## Measurements and tests
+### Conmutation
+First, you ought to make sure the MOSFET are conmutating correctly. For this, turn on the pwm signal and your VCC source, then measure the pins gate-source of each MOSFET with an oscilloscope and make sure the signals are the complement of each other and respond to the change in duty. Aditionally, you should measure the gate current to ensure it is not exceeding the drivers capacity.
+**ADD PICS**
+<p>
+  <img src="pics/signals.jpg" alt="schematic" width="600"/>
+</p>
 
+<p>
+  <img src="pics/gcurrent.png" alt="PCB" width="600"/>
+</p>
+
+### Powering the circuit
+Check the waveforms of the inductor current and output voltage, ideally you should be looking at two saw-like waves with minimal ripple.
+![testing](pics/oscilloscoping.jpg)
+Once you have ensured the inductor current and the output voltage have satisfied your needs you can proceed to measure the converters effiency for each mode.
+### Efficiency 
+TODO
 ## ✅ TODO   
-- [ ] Firmware integration (ESP32 control)  
+- [ ] PIC32 control
+- [ ] pictures (Conmutation, gate current, effiency)
+- [ ] graphic interface
+- [ ] Firmware integration (ESP32 control)
+- [ ] Final PCB
 - [ ] Experimental validation
-PPT:
-- [ ] Ingenieria basica
-- [ ] Eleccion de nucleo y explicaciones del tipo de inductor
-- [ ] Tecnologia del capacitor
-- [ ] Frecuencia de corte del circuito
-- [ ] Calculos de ESR
-- [ ] Colocar en que nivel estamos
 ---
 
 ## 👥 Collaborators
