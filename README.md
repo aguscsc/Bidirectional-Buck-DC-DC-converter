@@ -53,6 +53,7 @@ Diagram (preliminary):
   - \($\mu_{r}$\) = relative permeability of the material
   - \($N$\) = number of turns
 
+Recomendation: use coil64 to check your calculations.
 ### Capacitor
 - To be dimensioned from capacitor current balance:
 - buck
@@ -99,7 +100,7 @@ First, you ought to make sure the MOSFET are conmutating correctly. For this, tu
 ### Powering the circuit
 Check the waveforms of the inductor current and output voltage, ideally you should be looking at two saw-like waves with minimal ripple.
 ![testing](pics/oscilloscoping.jpg)
-Once you have ensured the inductor current and the output voltage have satisfied your need you can proceed to measure the converters effiency for each mode.
+Once you have ensured the inductor current and the output voltage have satisfied your needs you can proceed to measure the converters effiency for each mode.
 ### Efficiency 
 TODO
 ## ✅ TODO   
