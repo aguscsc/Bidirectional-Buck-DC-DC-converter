@@ -1,0 +1,24 @@
+<green>BUCK</green>:
+
+INPUT: 0.22A, 23V, 5.06W
+
+OUTPUT: 13.95V, 40ohm, 0.348A
+
+power output: 4.865 W
+
+efficiency: 96%
+
+duty: 65%
+
+<red>BOOST</red>
+
+
+INPUT: 0.45A, 12V, 5.4W
+
+OUTPUT: 0.180A, 27.1V 
+
+power output: 5.064W
+
+efficiency: 93.7%
+
+duty: ~40.5%, 59.5%
