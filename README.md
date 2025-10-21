@@ -100,6 +100,8 @@ First, you ought to make sure the MOSFET are conmutating correctly. For this, tu
 Check the waveforms of the inductor current and output voltage, ideally you should be looking at two saw-like waves with minimal ripple.
 ![testing](pics/oscilloscoping.jpg)
 Once you have ensured the inductor current and the output voltage have satisfied your needs you can proceed to measure the converters effiency for each mode.
+
+Note: if you struggle achieving the voltage ripple required, considering soldering ceramic capacitors paralell to your current ones.
 ### Efficiency 
 **BUCK** R = $39.8$
 
