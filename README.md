@@ -89,11 +89,11 @@ This section breaks down the process of prototyping and testing, the pcb in the 
 ### Conmutation
 First, you ought to make sure the MOSFET are conmutating correctly. For this, turn on the pwm signal and your VCC source, then measure the pins gate-source of each MOSFET with an oscilloscope and make sure the signals are the complement of each other and respond to the change in duty. Aditionally, you should measure the gate current to ensure it is not exceeding the drivers capacity.
 <p>
-  <img src="pics/conmutate.jpeg" alt="schematic" width="600"/>
+  <img src="pics/conmutate.jpeg" alt="conmutation" width="600"/>
 </p>
 
 <p>
-  <img src="pics/gcurrent.png" alt="PCB" width="600"/>
+  <img src="pics/gcurrent.png" alt="current" width="600"/>
 </p>
 
 ### Powering the circuit
@@ -122,11 +122,13 @@ Note: if you struggle achieving the voltage ripple required, considering solderi
 | 49.5%  | 12 V | 0.30 A | 22.11 V | 3.60 W | 3.43 W | 95.4 % |
 | 59.5%  | 12 V | 0.46 A | 26.77 V | 5.52 W | 5.04 W | 91.3 % |
 
-
+# PWM control
+Previously, the pwm signal was generated with a waveform generator, for real applications this has to be implemented with a microcontroller, in this case we'll use a PIC32 to generate the pwm signal.
+This section will cover the programming and testing of the control system and its integration with the power circuit.
 
 ## ✅ TODO   
 - [ ] PIC32 control
-- [ ] pictures (Conmutation, gate current, effiency)
+- [ ] pictures (gate current, under the board)
 - [ ] graphic interface
 - [ ] Firmware integration (ESP32 control)
 - [ ] Final PCB
