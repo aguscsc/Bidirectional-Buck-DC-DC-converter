@@ -109,6 +109,8 @@ Once you have ensured the inductor current and the output voltage have satisfied
 | 45%  | 23 V | 0.10 A | 9.45 V | 2.30 W | 1.32 W | 97.5 % |
 | 55%  | 23 V | 0.16 A | 11.6 V | 3.68 W | 3.38 W | 91.8 % |
 | 65%  | 23 V | 0.22 A | 13.78 V | 5.06 W | 3.38 W | 94.3 % |
+
+
 **BOOST** R = $142.2$
 
 | Duty | $V_{in}$ | $I_{in}$ | $V_{out}$ | $P_{in}$ | $P_{out}$ | Efficiency |
