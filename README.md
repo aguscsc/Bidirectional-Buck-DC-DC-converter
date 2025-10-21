@@ -88,9 +88,8 @@ This section breaks down the process of prototyping and testing, the pcb in the 
 ## Measurements and tests
 ### Conmutation
 First, you ought to make sure the MOSFET are conmutating correctly. For this, turn on the pwm signal and your VCC source, then measure the pins gate-source of each MOSFET with an oscilloscope and make sure the signals are the complement of each other and respond to the change in duty. Aditionally, you should measure the gate current to ensure it is not exceeding the drivers capacity.
-**ADD PICS**
 <p>
-  <img src="pics/signals.jpg" alt="schematic" width="600"/>
+  <img src="pics/conmutate.jpeg" alt="schematic" width="600"/>
 </p>
 
 <p>
@@ -102,7 +101,21 @@ Check the waveforms of the inductor current and output voltage, ideally you shou
 ![testing](pics/oscilloscoping.jpg)
 Once you have ensured the inductor current and the output voltage have satisfied your needs you can proceed to measure the converters effiency for each mode.
 ### Efficiency 
-TODO
+**BUCK** R = $39.8$
+|Duty|$V_{in}$|$I_{in}$|$V_{out}$|$P_{in}$|$P_{out}$|Efficiency|
+|$35\%$|$23V$|$0.06A$|$7.26V$|$1.38W$|$1.32W$|$96.4\%$|
+|$45\%$|$23V$|$0.10A$|$9.45V$|$2.3W$|$1.32W$|$97.5\%$|
+|$55\%$|$23V$|$0.16A$|$11.6V$|$3.68W$|$3.38W$|$91.8\%$|
+|$65\%$|$23V$|$0.22A$|$13.78V$|$5.06W$|$3.38W$|$94.3\%$|
+
+**BOOST** R = $142.2$
+|Duty|$V_{in}$|$I_{in}$|$V_{out}$|$P_{in}$|$P_{out}$|Efficiency|
+|$29.5\%$|$12V$|$0.16A$|$7.2V$|$1.38W$|$1.32W$|$96.4\%$|
+|$39.5\%$|$12V$|$0.21A$|$9.45V$|$2.3W$|$1.32W$|$97.5\%$|
+|$49.5\%$|$12V$|$0.30A$|$11.6V$|$3.68W$|$3.38W$|$91.8\%$|
+|$59.5\%$|$12V$|$0.46A$|$13.78V$|$5.06W$|$3.38W$|$94.3\%$|
+
+
 ## ✅ TODO   
 - [ ] PIC32 control
 - [ ] pictures (Conmutation, gate current, effiency)
