@@ -53,7 +53,7 @@ Diagram (preliminary):
   - \($\mu_{r}$\) = relative permeability of the material
   - \($N$\) = number of turns
 
-Recomendation: use coil64 to check your calculations.
+Recomendation: use coil64 to check your calculations, research skin effect and how different AWG interact with the frequency you're using (https://en.wikipedia.org/wiki/Skin_effect).
 ### Capacitor
 - To be dimensioned from capacitor current balance:
 - buck
