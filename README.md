@@ -84,7 +84,7 @@ This section breaks down the process of prototyping and testing, the pcb in the 
 - IR2184 driver (it can generate both MOSFET signals)
 - 2 10 ohm gate resistors 1W (it limits the gate current)
 - 2 10k ohm pulldown resistor 1W (drains the gate source capacitance)
- ![Prototype](pics/bucksito_compp.jpg)
+ ![Prototype](pics/bucksito_comp.jpg)
 ## Measurements and tests
 ### Conmutation
 First, you ought to make sure the MOSFET are conmutating correctly. For this, turn on the pwm signal and your VCC source, then measure the pins gate-source of each MOSFET with an oscilloscope and make sure the signals are the complement of each other and respond to the change in duty. Aditionally, you should measure the gate current to ensure it is not exceeding the drivers capacity.
