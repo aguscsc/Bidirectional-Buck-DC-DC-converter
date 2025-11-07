@@ -63,35 +63,125 @@ def main():
     # pre-conection 
     root.serial_connection = None 
 
+# ------------------ WARNING POPOUP ------------------------------
+# /--- Custom Warning Popup Function ---/
+    # This is the function you asked for
+
+    def warning_popup(title, message):
+        """Displays a styled, modal pop-up warning."""
+        def back_command():
+            popup.destroy()
+            if root.mode_var.get() == 1:
+                duty_var.set(50)
+            elif root.mode_var.get() ==0:
+                duty_var.set(40)
+            duty_change(str(duty_var.get()))
+        popup = tk.Toplevel(root)
+        popup.title(title)
+        
+        popup.config(bg=root.FRAME_COLOR, padx=30, pady=20)
+        popup.style = ttk.Style(popup)
+        popup.style.theme_use('clam')
+        
+        popup.style.configure("TLabel", background=root.FRAME_COLOR, foreground=root.TEXT_COLOR, font=("Inter", 11))
+        popup.style.configure("TButton", font=("Inter", 10,"bold"), padding=5)
+        # --- AND THE FIX WAS HERE (Added parentheses) ---
+        popup.style.map("TButton", foreground=[('active','black')], background=[('active', root.TEXT_COLOR)])
+        popup.style.configure("Primary.TButton", background=root.BUTTON_COLOR, foreground="white")
+        popup.style.map("Primary.TButton", background=[('active', '#63b3ed')])
+
+        popup.resizable(False, False)
+        
+        icon_label = ttk.Label(popup, text="⚠️", font=("Inter", 24))
+        icon_label.pack(pady=(0, 10))
+        
+        message_label = ttk.Label(popup, text=message, wraplength=300, justify='center')
+        message_label.pack(pady=(0, 20))
+        
+        ok_button = ttk.Button(
+            popup, text="OK", style="Primary.TButton", command=popup.destroy
+        )
+        go_back = ttk.Button (
+            popup, text="Go Back", command=back_command
+        )
+        ok_button.pack()
+        go_back.pack() 
+
+        # Calculate position to center on root
+        root.update_idletasks()
+        root_x = root.winfo_x()
+        root_y = root.winfo_y()
+        root_width = root.winfo_width()
+        root_height = root.winfo_height()
+        
+        popup.update_idletasks()
+        popup_width = popup.winfo_width()
+        popup_height = popup.winfo_height()
+        
+        x = root_x + (root_width // 2) - (popup_width // 2)
+        y = root_y + (root_height // 2) - (popup_height // 2)
+        
+        popup.geometry(f"{popup_width}x{popup_height}+{x}+{y}")
+        
+        # --- TWM HINT ---
+        # This tells Tiling Window Managers to float this window
+        popup.wm_attributes("-type", "dialog") 
+        
+        popup.grab_set()
+        popup.transient(root)
+        popup.wait_window()
+################################################################
 # Slider update
+    root.mode_var = tk.IntVar(value=1) 
+    warn_var = tk.IntVar(value=0) 
     def duty_change(value_str):
         value = float(value_str)
         rounded_value = round(2*value)/2.0
+        if (root.mode_var.get() == 1):
+            if rounded_value > 70:
+                if (warn_var.get() == 0):
+                    warn_var.set(1)
+                    warning_popup("WARNING","Over suggested Operation Point")
+                    warning_log("Over suggested operation Point, keep Duty under 70 %")
+                    if duty_var.get() != rounded_value:
+                        return
+            elif (rounded_value == 65):
+                update_log("Suggested operation point 65 %")
+            elif(rounded_value < 70):
+                warn_var.set(0)
+
+        elif (root.mode_var.get() == 0):
+            if rounded_value > 60:
+                if warn_var.get() ==0:
+                    warn_var.set(1)
+                    warning_popup("WARNING","Over suggested Operation Point")
+                    warning_log("Over suggested operation Point, keep Duty under 60 %")
+                    if duty_var.get() != rounded_value:
+                        return
+            elif (rounded_value == 55):
+                update_log("Suggested operation point 55 %")
+            elif(rounded_value < 60):
+                warn_var.set(0)
         # sends value update
         duty_value_label.config(text=f"Duty: {rounded_value} %")
         draw_pwm_waveform(rounded_value)
 
     def up_duty():
         """Called by the Up button."""
-        # --- FIX 2: Get value from var ---
         current_value = duty_var.get()
         new_value = min(current_value + 0.5, 100.0) # Cap at 100
-        # --- FIX 3: Set the var. This will trigger duty_change() ---
         rounded = round(2*new_value)/2.0
         duty_var.set(rounded)
-        duty_value_label.config(text=f"Duty: {rounded} %")
-        draw_pwm_waveform(rounded)
+        duty_change(str(rounded))
 
     def down_duty():
         """Called by the Down button."""
-        # --- FIX 2: Get value from var ---
         current_value = duty_var.get()
         new_value = max(current_value - 0.5, 0.0) # Floor at 0
-        # --- FIX 3: Set the var. ---
         rounded = round(2*new_value)/2.0
         duty_var.set(rounded)
-        duty_value_label.config(text=f"Duty: {rounded} %")
-        draw_pwm_waveform(rounded)
+        duty_change(str(rounded))
+
 # --------- widgets ---------------------------    
     # --- connection ---
     conn_frame = ttk.Frame(root, padding=(20,10))
@@ -124,6 +214,7 @@ def main():
     #  refresh button 
     def refresh_ports():
         new_ports = get_ports()
+        update_log(f"{len(new_ports)} active ports found")
         root.com_port_combo['value'] = new_ports
         if new_ports:
             root.com_port_var.set(new_ports[0])
@@ -148,16 +239,32 @@ def main():
     
     #BUCK and BOOST modes
     def send_mode_buck():
+        mode_buck.config(style = "Primary.TButton")
+        mode_boost.config(style = "TButton")
+        duty_var.set(50)
+        duty_value_label.config(text=f"Duty: {50} %")
+        update_log("Buck Mode activated")
+        root.mode_var.set(1) # Set mode to BUCK
         if root.serial_connection and root.serial_connection.is_open:
             print("COMMAND: Set mode to BUCK (ON)")
         else:
             print("Error: Not connected.")
+               # Redraw canvas with new mode
+        draw_pwm_waveform(duty_var.get())
 
     def send_mode_boost():
+        mode_boost.config(style = "Primary.TButton")
+        mode_buck.config(style = "TButton")
+        duty_var.set(40)
+        duty_value_label.config(text=f"Duty: {40} %")
+        update_log("Boost Mode activated")
+        root.mode_var.set(0) # Set mode to BOOST        
         if root.serial_connection and root.serial_connection.is_open:
             print("COMMAND: Set mode to BOOST (OFF)")
         else:
             print("Error: Not connected.")
+               # Redraw canvas with new mode
+        draw_pwm_waveform(duty_var.get())
 
     mode_buck = ttk.Button(
         mode_card,
@@ -219,10 +326,24 @@ def main():
 
 #/--------- Status Log -------------/
     log_frame = ttk.Frame(control_frame)
-    log_frame.pack(side='bottom', fill='y',expand=True)
+    log_frame.pack(side='bottom', fill='x',expand=True)
 
     log_card = ttk.LabelFrame(log_frame, text="Status Log", padding=10)
     log_card.pack(fill='both',expand=True)
+
+    #update status log
+    def update_log(message):
+
+        log_text.config(state='normal')
+        log_text.insert(tk.END, f"{message}\n")
+        log_text.see(tk.END)
+        log_text.config(state='disabled')
+
+    def warning_log(message):
+        log_text.config(state='normal')
+        log_text.insert(tk.END, f"{message}\n","error" )
+        log_text.see(tk.END)
+        log_text.config(state='disabled')
 
     log_text = tk.Text(
         log_card,
@@ -231,12 +352,17 @@ def main():
         state='disabled',  # Start as read-only
         bg=root.FRAME_COLOR, 
         fg=root.TEXT_COLOR, 
-        font=("Courier New", 20),
+        font=("Courier New", 10),
         wrap='word',
         bd=0,
         highlightthickness=0    
     )
-    log_text.pack(fill='both', expand=True, pady=(0,0))
+    log_text.tag_config("timestamp", foreground="#90cdf4") # Light blue
+    log_text.tag_config("info", foreground=root.TEXT_COLOR)
+    log_text.tag_config("error", foreground=root.DANGER_COLOR, font=("Inter", 12))
+    log_text.tag_config("success", foreground=root.SUCCESS_COLOR)
+    
+    log_text.pack(fill='both', expand=True )
 
 #/------- waveform --------------------/
     wave_frame = ttk.Frame(main_frame)
@@ -245,7 +371,7 @@ def main():
     wave_label = ttk.LabelFrame(wave_frame, text="PWM Signal", padding=10)
     wave_label.pack(fill='both', expand=True)
     V_BUCK  = 23
-    V_BOOST = 27
+    V_BOOST = 12
         # --- 1. THE CANVAS WIDGET ---
     # This creates the white drawing area
     canvas = tk.Canvas(
@@ -254,6 +380,13 @@ def main():
         highlightthickness=0
     )
     canvas.pack(fill='both', expand=True)
+        # --- Resize and Close Handlers ---
+    def on_resize(event):
+        # Only redraw if the canvas itself is resizing
+        if event.widget == canvas:
+            draw_pwm_waveform(root.duty_var.get())
+
+
         # --- 2. THE DRAWING FUNCTION ---
     # This function draws the waveform on the canvas
     def draw_pwm_waveform(duty_cycle_percent):
@@ -301,35 +434,44 @@ def main():
             width=3,            # Line thickness
             fill="#4299e1"      # Line color
         )
-        # --- NEW: Draw horizontal lines for high/low ---
+        # --- Draw horizontal lines for high/low ---
         canvas.create_line(0, y_high, width, y_high, fill=grid_color, dash=(4, 4))
         canvas.create_line(0, y_low, width, y_low, fill=grid_color, dash=(4, 4))
         
-        # --- NEW: Add Voltage Text Labels ---
-        canvas.create_text(
-            width - 10, # 10px from right edge
-            y_high,     # At the high line
-            text=f"{V_BUCK:.1f}V", 
-            anchor="e", # Anchor text to the right ("east")
-            fill="#555" # Dark gray text
-        )
-        canvas.create_text(
-            width - 10, 
-            y_low, 
-            text="0.0V", 
-            anchor="e", 
-            fill="#555"
+        current_mode = root.mode_var.get()
+        duty_decimal = duty_cycle_percent/100.0        
+        # Use V_BUCK for PWM high, V_BOOST_IN for calculation
+        v_high_label = f"{5}V" # PWM signal is always from V_BUCK
+        v_low_label = "0.0V"
+        
+        # ---  Calculate and show Average Voltage ---
+        if current_mode == 1: # BUCK
+            # Ideal V_out = D * V_in
+            v_avg = V_BUCK * duty_decimal*0.96
+            v_avg_text = f"Buck V_out: {v_avg:.2f}V"
+        else: # BOOST
+            # Ideal V_out = V_in / (1 - D)
+            if duty_decimal >= 0.99: # Avoid division by zero
+                v_avg_text = "Boost V_out: ---"
+            else:
+                v_avg = 0.93*V_BOOST / (1.0 - duty_decimal)
+                v_avg_text = f"Boost V_out: {v_avg:.2f}V"
+                
+        canvas.create_text(10, y_high, text=v_high_label, anchor="w", fill="#555")
+        canvas.create_text(10, y_low, text=v_low_label, anchor="w", fill="#555")
+        
+        canvas.create_rectangle(
+            width - 170, # x1 (top-left)
+            10,          # y1 (top-left)
+            width - 10,  # x2 (bottom-right)
+            35,          # y2 (bottom-right)
+            fill="#e8db2a", # Light gray background
+            outline=""     # No border
         )
         
-        # --- NEW: Calculate and show Average Voltage ---
-        v_avg = V_BUCK * (duty_cycle_percent / 100.0)*0.96
         canvas.create_text(
-            width - 10, # 10px from right edge
-            15,         # 15px from top edge
-            text=f"V_avg: {v_avg:.2f}V",
-            anchor="ne", # Anchor text to the top-right ("north-east")
-            font=("Inter", 12, "bold"),
-            fill="#000"
+            width - 10, 15, text=v_avg_text,
+            anchor="ne", font=("Inter", 12, "bold"), fill="#000"
         )
 
     def initial_draw():
