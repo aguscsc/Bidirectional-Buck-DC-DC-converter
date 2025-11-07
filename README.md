@@ -92,10 +92,6 @@ First, you ought to make sure the MOSFET are conmutating correctly. For this, tu
   <img src="pics/conmutate.jpeg" alt="conmutation" width="600"/>
 </p>
 
-<p>
-  <img src="pics/gcurrent.png" alt="current" width="600"/>
-</p>
-
 ### Powering the circuit
 Check the waveforms of the inductor current and output voltage, ideally you should be looking at two saw-like waves with minimal ripple.
 ![testing](pics/oscilloscoping_comp.jpg)
@@ -126,10 +122,28 @@ Note: if you struggle achieving the voltage ripple required, considering solderi
 Previously, the pwm signal was generated with a waveform generator, for real applications this has to be implemented with a microcontroller, in this case we'll use a PIC32 to generate the pwm signal.
 This section will cover the programming and testing of the control system and its integration with the power circuit.
 
+# Graphical Interface
+To control the micontoller used for the PWM signal, a graphical interface is designed, the criteria followed are the following:
+
+- Intuitive
+- Ease to switch between modes
+- Secure, it must limit human error as much as possible without harming the user's experience
+- Use of non distracting colors
+- It must have a visual representation of the signal and voltage output
+
+To develop such interface the language chosen is Python, due to the presence of the library [Tkinter](https://docs.python.org/es/3/library/tkinter.html), which made the process a lot easier.
+
+Here you can see the interface next to an example of a warning popup when going above the suggested operation point.
+<p>
+  <img src="gui.png" alt="conmutation" width="600"/>
+</p>
+
+<p>
+  <img src="pics/warning_gui.png" alt="conmutation" width="600"/>
+</p>
+
 ## ✅ TODO   
 - [ ] PIC32 control
-- [ ] pictures (gate current, under the board)
-- [ ] graphic interface
 - [ ] Firmware integration (ESP32 control)
 - [ ] Final PCB
 - [ ] Experimental validation
