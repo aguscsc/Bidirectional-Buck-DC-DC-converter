@@ -218,8 +218,7 @@ def main():
         
     root.com_port_combo.pack(side='left', padx=5)
     
-    baud_rate.set("115200")
-    baud_frame.pack(side='left',padx=5)
+
     #  refresh button 
     def refresh_ports():
         new_ports = get_ports()
@@ -232,6 +231,9 @@ def main():
             
     refresh_button = ttk.Button(conn_frame, text="Refresh", command=refresh_ports, style="Primary.TButton")
     refresh_button.pack(side='left', padx=5)
+    
+    baud_rate.set("115200")
+    baud_frame.pack(side='left',padx=5)
 
     # --- Connection Functions ---
     def connect():
@@ -239,7 +241,7 @@ def main():
         port_full_name = root.com_port_var.get()
         
         if "No ports found" in port_full_name:
-            update_log("Connection failed: No port selected.", "error")
+            warning_log("Connection failed: No port selected.")
             return
             
         port_name = port_full_name.split(' | ')[0]
@@ -247,14 +249,14 @@ def main():
         try:
             # --- IMPORTANT: Set baud rate to match microcontroller ---
             root.serial_connection = serial.Serial(port_name, baud_rate, timeout=1)
-            update_log(f"Connected to {port_name}", "success")
+            update_log(f"Connected to {port_name}")
             connect_button.config(state='disabled')
             disconnect_button.config(state='normal')
             refresh_button.config(state='disabled')
             root.com_port_combo.config(state='disabled')
             
         except serial.SerialException as e:
-            update_log(f"Failed to connect: {e}", "error")
+            warning_log(f"Failed to connect: {e}")
             root.serial_connection = None
 
     def disconnect():
@@ -262,12 +264,18 @@ def main():
         if root.serial_connection and root.serial_connection.is_open:
             root.serial_connection.close()
             root.serial_connection = None
-            update_log("Disconnected.", "info")
+            update_log("Disconnected.")
         
         connect_button.config(state='normal')
         disconnect_button.config(state='disabled')
         refresh_button.config(state='normal')
-        root.com_port_combo.config(state='normal')# /--- Main Frame -------------------/
+        root.com_port_combo.config(state='normal')
+    
+    connect_button = ttk.Button(conn_frame, text="Connect", command=connect, style="TButton")
+    connect_button.pack(side='left',padx=5)
+    disconnect_button = ttk.Button(conn_frame, text="Disconnect", command=connect, style="Danger.TButton")
+    disconnect_button.pack(side='left',padx=5)
+# /--- Main Frame -------------------/
     #sets the main frame for widgets
     main_frame = ttk.Frame(root, padding = 20)
     main_frame.pack(fill='both', expand=True)
@@ -369,7 +377,7 @@ def main():
 
 #/--------- Status Log -------------/
     log_frame = ttk.Frame(control_frame)
-    log_frame.pack(side='bottom', fill='x',expand=True)
+    log_frame.pack(side='bottom', fill='y',expand=True)
 
     log_card = ttk.LabelFrame(log_frame, text="Status Log", padding=10)
     log_card.pack(fill='both',expand=True)
