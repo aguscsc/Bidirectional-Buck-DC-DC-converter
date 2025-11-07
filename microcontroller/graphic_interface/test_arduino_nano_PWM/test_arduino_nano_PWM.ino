@@ -1,4 +1,4 @@
-22222222222222222// This variable will hold the duty cycle sent from Python
+// This variable will hold the duty cycle sent from Python
 float dutyCycle = 0.0;
 // This variable will hold the mode (1 = BUCK, 0 = BOOST)
 int mode = 1;
