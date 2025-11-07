@@ -123,7 +123,7 @@ Previously, the pwm signal was generated with a waveform generator, for real app
 This section will cover the programming and testing of the control system and its integration with the power circuit.
 
 # Graphical Interface
-To control the micontoller used for the PWM signal, a graphical interface is designed, the criteria followed are the following:
+To control the microntoller used for the PWM signal, a graphical interface is designed, the criteria followed for the design were:
 
 - Intuitive
 - Ease to switch between modes
