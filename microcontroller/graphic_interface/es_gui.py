@@ -22,7 +22,7 @@ def main():
 # /-------------- CONFIG ------------------------------------/
     # main application window
     root  = tk.Tk()
-    root.title("Buck Bidireccional Control")
+    root.title("Panel de Control")
     root.geometry("800x600")
     root.style = ttk.Style(root)
     root.style.theme_use('clam')
@@ -100,7 +100,7 @@ def main():
             popup, text="OK", style="Primary.TButton", command=popup.destroy
         )
         go_back = ttk.Button (
-            popup, text="Go Back", command=back_command
+            popup, text="Atrás", command=back_command
         )
         ok_button.pack()
         go_back.pack() 
@@ -139,7 +139,7 @@ def main():
             # update_log(f"Sent: {command_string.strip()}") # Optional: for debugging
         else:
             if root.winfo_exists(): # Don't log on init
-                warning_log("Not connected. Cannot send duty.")
+                warning_log("No conectado. no es posible mandar duty.")
 
 
     def duty_change(value_str):
@@ -149,8 +149,8 @@ def main():
             if rounded_value > 70:
                 if (warn_var.get() == 0):
                     warn_var.set(1)
-                    warning_popup("WARNING","Over suggested Operation Point")
-                    warning_log("Over suggested operation Point, keep Duty under 70 %")
+                    warning_popup("ADVERTENCIA","Está sobre el punto de operación sugerido")
+                    warning_log("Sobrepaso de punto de operación, por favor mantener duty bajo 70 %")
                     if duty_var.get() != rounded_value:
                         return
             elif (rounded_value == 65):
@@ -163,8 +163,8 @@ def main():
             if rounded_value > 60:
                 if warn_var.get() ==0:
                     warn_var.set(1)
-                    warning_popup("WARNING","Over suggested Operation Point")
-                    warning_log("Over suggested operation Point, keep Duty under 60 %")
+                    warning_popup("ADVERTENCIA","Está sobre el punto de operación sugerido")
+                    warning_log("Sobrepaso de punto de operación, por favor mantener duty bajo 60 %")
                     if duty_var.get() != rounded_value:
                         return
             elif (rounded_value == 55):
@@ -198,7 +198,7 @@ def main():
     conn_frame.pack(fill = 'x', side='top')
     
     # Label fro the connection frame
-    ttk.Label(conn_frame, text = "Connection Port: ", font=("Inter", 10, "bold")).pack(side='left',padx=(0, 5))
+    ttk.Label(conn_frame, text = "Puerto de conexión: ", font=("Inter", 10, "bold")).pack(side='left',padx=(0, 5))
      
     # Get the list of ports
     available_ports = get_ports()
@@ -224,7 +224,7 @@ def main():
     if available_ports:
         root.com_port_var.set(available_ports[0]) # Set to the first available port
     else:
-        root.com_port_var.set("No ports found")
+        root.com_port_var.set("No se encontraron puertos")
         
     root.com_port_combo.pack(side='left', padx=5)
     
@@ -232,14 +232,14 @@ def main():
     #  refresh button 
     def refresh_ports():
         new_ports = get_ports()
-        update_log(f"{len(new_ports)} active ports found")
+        update_log(f"{len(new_ports)} puertos activos entcontrados")
         root.com_port_combo['value'] = new_ports
         if new_ports:
             root.com_port_var.set(new_ports[0])
         else:
-            root.com_port_var.set("No ports found")
+            root.com_port_var.set("No se encontraron puertos activos")
             
-    refresh_button = ttk.Button(conn_frame, text="Refresh", command=refresh_ports, style="Primary.TButton")
+    refresh_button = ttk.Button(conn_frame, text="Refrescar", command=refresh_ports, style="Primary.TButton")
     refresh_button.pack(side='left', padx=5)
     
     baud_rate.set("115200")
@@ -251,7 +251,7 @@ def main():
         port_full_name = root.com_port_var.get()
         
         if "No ports found" in port_full_name:
-            warning_log("Connection failed: No port selected.")
+            warning_log("Conexión Fallida: No port selected.")
             return
             
         port_name = port_full_name.split(' | ')[0]
@@ -269,7 +269,7 @@ def main():
             duty_change(0)
             
         except serial.SerialException as e:
-            warning_log(f"Failed to connect: {e}")
+            warning_log(f"Conexión Fallida: {e}")
             root.serial_connection = None
 
     def disconnect():
@@ -281,7 +281,7 @@ def main():
         if root.serial_connection and root.serial_connection.is_open:
             root.serial_connection.close()
             root.serial_connection = None
-            update_log("Disconnected.")
+            update_log("Desconectado.")
          
         connect_button.config(state='normal')
         disconnect_button.config(state='disabled')
@@ -290,9 +290,9 @@ def main():
     
     
 
-    connect_button = ttk.Button(conn_frame, text="Connect", command=connect, style="TButton")
+    connect_button = ttk.Button(conn_frame, text="Conectar", command=connect, style="TButton")
     connect_button.pack(side='left',padx=5)
-    disconnect_button = ttk.Button(conn_frame, text="Disconnect", command=disconnect, style="Danger.TButton")
+    disconnect_button = ttk.Button(conn_frame, text="Desconectar", command=disconnect, style="Danger.TButton")
     disconnect_button.pack(side='left',padx=5)
 # /--- Main Frame -------------------/
     #sets the main frame for widgets
@@ -304,7 +304,7 @@ def main():
     control_frame.pack(side='left', fill='y', padx=(0,10))
     
     # Mode 
-    mode_card = ttk.LabelFrame(control_frame, text="Mode Control", padding=15)
+    mode_card = ttk.LabelFrame(control_frame, text="Control de Modo", padding=15)
     mode_card.pack(fill='x', pady=(0,20))
     
     #BUCK and BOOST modes
@@ -313,13 +313,13 @@ def main():
         mode_boost.config(style = "TButton")
         duty_var.set(50)
         duty_value_label.config(text=f"Duty: {50} %")
-        update_log("Buck Mode activated")
+        update_log("Buck Mode activado")
         root.mode_var.set(1) # Set mode to BUCK
         duty_change(50)
         if root.serial_connection and root.serial_connection.is_open:
             print("COMMAND: Set mode to BUCK (ON)")
         else:
-            print("Error: Not connected.")
+            print("Error: Not conectado.")
                # Redraw canvas with new mode
         draw_pwm_waveform(duty_var.get())
 
@@ -328,13 +328,13 @@ def main():
         mode_buck.config(style = "TButton")
         duty_var.set(40)
         duty_value_label.config(text=f"Duty: {40} %")
-        update_log("Boost Mode activated")
+        update_log("Boost Mode activado")
         root.mode_var.set(0) # Set mode to BOOST        
         duty_change(40)
         if root.serial_connection and root.serial_connection.is_open:
-            print("COMMAND: Set mode to BOOST (OFF)")
+            print("COMMAND: Set mode to BOOST (ON)")
         else:
-            print("Error: Not connected.")
+            print("Error: No conectado.")
                # Redraw canvas with new mode
         draw_pwm_waveform(duty_var.get())
 
@@ -388,7 +388,7 @@ def main():
 
     duty_value_label = ttk.Label(
         duty_card,
-        text="Current value: 0%",
+        text="Valor Actual: 0%",
         font=("Inter", 10, "bold")
     )
     duty_button_up.pack(side='top', fill='x',expand=True)
@@ -555,4 +555,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
