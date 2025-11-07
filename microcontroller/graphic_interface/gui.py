@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import serial.tools.list_ports  
-
+import time
 
 
 #get USB ports in use
@@ -17,8 +17,6 @@ def get_ports():
             usb.append(name)
     return usb
 
-# conexion
-#def connect():
 
 def main():
 # /-------------- CONFIG ------------------------------------/
@@ -134,6 +132,16 @@ def main():
 # Slider update
     root.mode_var = tk.IntVar(value=1) 
     warn_var = tk.IntVar(value=0) 
+    def send2controller(rounded_value):
+        if root.serial_connection and root.serial_connection.is_open:
+            command_string = f"D:{rounded_value}\n"
+            root.serial_connection.write(command_string.encode('utf-8'))
+            # update_log(f"Sent: {command_string.strip()}") # Optional: for debugging
+        else:
+            if root.winfo_exists(): # Don't log on init
+                warning_log("Not connected. Cannot send duty.")
+
+
     def duty_change(value_str):
         value = float(value_str)
         rounded_value = round(2*value)/2.0
@@ -149,6 +157,7 @@ def main():
                 update_log("Suggested operation point 65 %")
             elif(rounded_value < 70):
                 warn_var.set(0)
+            send2controller(rounded_value)
 
         elif (root.mode_var.get() == 0):
             if rounded_value > 60:
@@ -162,6 +171,7 @@ def main():
                 update_log("Suggested operation point 55 %")
             elif(rounded_value < 60):
                 warn_var.set(0)
+            send2controller(1-rounded_value)
         # sends value update
         duty_value_label.config(text=f"Duty: {rounded_value} %")
         draw_pwm_waveform(rounded_value)
@@ -248,12 +258,15 @@ def main():
         
         try:
             # --- IMPORTANT: Set baud rate to match microcontroller ---
-            root.serial_connection = serial.Serial(port_name, baud_rate, timeout=1)
+            root.serial_connection = serial.Serial(port_name, int(baud_rate.get()), timeout=1)
             update_log(f"Connected to {port_name}")
             connect_button.config(state='disabled')
             disconnect_button.config(state='normal')
             refresh_button.config(state='disabled')
             root.com_port_combo.config(state='disabled')
+            root.mode_var.set(1)
+            duty_var.set(0)
+            duty_change(0)
             
         except serial.SerialException as e:
             warning_log(f"Failed to connect: {e}")
@@ -261,19 +274,25 @@ def main():
 
     def disconnect():
         """Closes the active serial connection."""
+        root.mode_var.set(1)
+        duty_var.set(0)
+        duty_change(0)
+        time.sleep(0.1)
         if root.serial_connection and root.serial_connection.is_open:
             root.serial_connection.close()
             root.serial_connection = None
             update_log("Disconnected.")
-        
+         
         connect_button.config(state='normal')
         disconnect_button.config(state='disabled')
         refresh_button.config(state='normal')
         root.com_port_combo.config(state='normal')
     
+    
+
     connect_button = ttk.Button(conn_frame, text="Connect", command=connect, style="TButton")
     connect_button.pack(side='left',padx=5)
-    disconnect_button = ttk.Button(conn_frame, text="Disconnect", command=connect, style="Danger.TButton")
+    disconnect_button = ttk.Button(conn_frame, text="Disconnect", command=disconnect, style="Danger.TButton")
     disconnect_button.pack(side='left',padx=5)
 # /--- Main Frame -------------------/
     #sets the main frame for widgets
@@ -296,6 +315,7 @@ def main():
         duty_value_label.config(text=f"Duty: {50} %")
         update_log("Buck Mode activated")
         root.mode_var.set(1) # Set mode to BUCK
+        duty_change(50)
         if root.serial_connection and root.serial_connection.is_open:
             print("COMMAND: Set mode to BUCK (ON)")
         else:
@@ -310,6 +330,7 @@ def main():
         duty_value_label.config(text=f"Duty: {40} %")
         update_log("Boost Mode activated")
         root.mode_var.set(0) # Set mode to BOOST        
+        duty_change(40)
         if root.serial_connection and root.serial_connection.is_open:
             print("COMMAND: Set mode to BOOST (OFF)")
         else:
@@ -335,7 +356,7 @@ def main():
     duty_card = ttk.LabelFrame(control_frame, text="Duty (%)", padding=15)
     duty_card.pack(fill='x')
 
-    duty_var = tk.DoubleVar(value=50)
+    duty_var = tk.DoubleVar(value=0)
     duty_slider = ttk.Scale(
         duty_card,
         from_= 0,
@@ -367,7 +388,7 @@ def main():
 
     duty_value_label = ttk.Label(
         duty_card,
-        text="Current value: 50%",
+        text="Current value: 0%",
         font=("Inter", 10, "bold")
     )
     duty_button_up.pack(side='top', fill='x',expand=True)
@@ -526,7 +547,7 @@ def main():
         )
 
     def initial_draw():
-        draw_pwm_waveform(50)
+        draw_pwm_waveform(0)
         
     root.after(500, initial_draw) # Wait 100ms then d
 
