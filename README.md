@@ -135,11 +135,11 @@ To develop such interface the language chosen is Python, due to the presence of 
 
 Here you can see the interface next to an example of a warning popup when going above the suggested operation point.
 <p>
-  <img src="pics/gui.png" alt="gui" width="600"/>
+  <img src="pics/gui.png" alt="gui" width="800"/>
 </p>
 
 <p>
-  <img src="pics/warning_gui.png" alt="gui_warn" width="600"/>
+  <img src="pics/warning_gui.png" alt="gui_warn" width="800"/>
 </p>
 
 ## Dependencies
