@@ -142,6 +142,25 @@ Here you can see the interface next to an example of a warning popup when going 
   <img src="pics/warning_gui.png" alt="gui_warn" width="600"/>
 </p>
 
+## Dependencies
+
+**Pyserial**
+
+```
+pip install pyserial
+```
+## How to use
+
+```
+git clone https://github.com/aguscsc/Bidirectional-Buck-DC-DC-converter.git
+cd Bidirectional-Buck-DC-DC-converter/microcontroller/graphic_interface
+python gui.py
+```
+**Spanish version**
+
+```
+python es_gui.py
+```
 ## ✅ TODO   
 - [ ] PIC32 control
 - [ ] Firmware integration (ESP32 control)
