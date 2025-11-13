@@ -3,9 +3,9 @@
     "GenerationSoftware": {
       "Vendor": "KiCad",
       "Application": "Pcbnew",
-      "Version": "9.0.4"
+      "Version": "9.0.5"
     },
-    "CreationDate": "2025-10-01T17:56:56-03:00"
+    "CreationDate": "2025-10-21T22:54:45-03:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
@@ -27,7 +27,6 @@
       "PadToPad": 0.2,
       "PadToTrack": 0.2,
       "TrackToTrack": 0.2,
-      "MinLineWidth": 0.5,
       "TrackToRegion": 0.5,
       "RegionToRegion": 0.5
     }
@@ -36,6 +35,16 @@
     {
       "Path": "buck_bidireccional-B_Cu.gbr",
       "FileFunction": "Copper,L2,Bot",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "buck_bidireccional-F_Silkscreen.gbr",
+      "FileFunction": "Legend,Top",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "buck_bidireccional-B_Silkscreen.gbr",
+      "FileFunction": "Legend,Bot",
       "FilePolarity": "Positive"
     }
   ],

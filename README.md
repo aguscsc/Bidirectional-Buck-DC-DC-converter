@@ -53,7 +53,7 @@ Diagram (preliminary):
   - \($\mu_{r}$\) = relative permeability of the material
   - \($N$\) = number of turns
 
-Recomendation: use coil64 to check your calculations.
+Recomendation: use coil64 to check your calculations, research skin effect and how different AWG interact with the frequency you're using (https://en.wikipedia.org/wiki/Skin_effect).
 ### Capacitor
 - To be dimensioned from capacitor current balance:
 - buck
@@ -84,29 +84,85 @@ This section breaks down the process of prototyping and testing, the pcb in the 
 - IR2184 driver (it can generate both MOSFET signals)
 - 2 10 ohm gate resistors 1W (it limits the gate current)
 - 2 10k ohm pulldown resistor 1W (drains the gate source capacitance)
- ![Prototype](pics/bucksito_labeled.jpg)
+ ![Prototype](pics/bucksito_comp.jpg)
 ## Measurements and tests
 ### Conmutation
 First, you ought to make sure the MOSFET are conmutating correctly. For this, turn on the pwm signal and your VCC source, then measure the pins gate-source of each MOSFET with an oscilloscope and make sure the signals are the complement of each other and respond to the change in duty. Aditionally, you should measure the gate current to ensure it is not exceeding the drivers capacity.
-**ADD PICS**
 <p>
-  <img src="pics/signals.jpg" alt="schematic" width="600"/>
-</p>
-
-<p>
-  <img src="pics/gcurrent.png" alt="PCB" width="600"/>
+  <img src="pics/conmutate.jpeg" alt="conmutation" width="600"/>
 </p>
 
 ### Powering the circuit
 Check the waveforms of the inductor current and output voltage, ideally you should be looking at two saw-like waves with minimal ripple.
-![testing](pics/oscilloscoping.jpg)
+![testing](pics/oscilloscoping_comp.jpg)
 Once you have ensured the inductor current and the output voltage have satisfied your needs you can proceed to measure the converters effiency for each mode.
+
+Note: if you struggle achieving the voltage ripple required, considering soldering ceramic capacitors paralell to your current ones.
 ### Efficiency 
-TODO
+**BUCK** R = $39.8$
+
+| Duty | $V_{in}$ | $I_{in}$ | $V_{out}$ | $P_{in}$ | $P_{out}$ | Efficiency |
+|:----:|:---------:|:---------:|:----------:|:---------:|:----------:|:-----------:|
+| 35%  | 23 V | 0.06 A | 7.26 V | 1.38 W | 1.32 W | 96.4 % |
+| 45%  | 23 V | 0.10 A | 9.45 V | 2.30 W | 2.24 W | 97.5 % |
+| 55%  | 23 V | 0.16 A | 11.6 V | 3.68 W | 3.38 W | 91.8 % |
+| 65%  | 23 V | 0.22 A | 13.78 V | 5.06 W | 4.77 W | 94.3 % |
+
+
+**BOOST** R = $142.2$
+
+| Duty | $V_{in}$ | $I_{in}$ | $V_{out}$ | $P_{in}$ | $P_{out}$ | Efficiency |
+|:----:|:---------:|:---------:|:----------:|:---------:|:----------:|:-----------:|
+| 29.5%  | 12 V | 0.16 A | 16.34 V | 1.92 W | 1.87 W | 97.7 % |
+| 39.5%  | 12 V | 0.21 A | 18.79 V | 2.52 W | 2.48 W | 98.5 % |
+| 49.5%  | 12 V | 0.30 A | 22.11 V | 3.60 W | 3.43 W | 95.4 % |
+| 59.5%  | 12 V | 0.46 A | 26.77 V | 5.52 W | 5.04 W | 91.3 % |
+
+# PWM control
+Previously, the pwm signal was generated with a waveform generator, for real applications this has to be implemented with a microcontroller, in this case we'll use a PIC32 to generate the pwm signal.
+This section will cover the programming and testing of the control system and its integration with the power circuit.
+
+# Graphical Interface
+To control the microntoller used for the PWM signal, a graphical interface is designed, the criteria followed for the design were:
+
+- Intuitive
+- Ease to switch between modes
+- Secure, it must limit human error as much as possible without harming the user's experience
+- Use of non distracting colors
+- It must have a visual representation of the signal and voltage output
+
+To develop such interface the language chosen is Python, due to the presence of the library [Tkinter](https://docs.python.org/es/3/library/tkinter.html), which made the process a lot easier.
+
+Here you can see the interface next to an example of a warning popup when going above the suggested operation point.
+<p>
+  <img src="pics/gui.png" alt="gui" width="800"/>
+</p>
+
+<p>
+  <img src="pics/warning_gui.png" alt="gui_warn" width="800"/>
+</p>
+
+## Dependencies
+
+**Pyserial**
+
+```
+pip install pyserial
+```
+## How to use
+
+```
+git clone https://github.com/aguscsc/Bidirectional-Buck-DC-DC-converter.git
+cd Bidirectional-Buck-DC-DC-converter/microcontroller/graphic_interface
+python gui.py
+```
+**Spanish version**
+
+```
+python es_gui.py
+```
 ## ✅ TODO   
 - [ ] PIC32 control
-- [ ] pictures (Conmutation, gate current, effiency)
-- [ ] graphic interface
 - [ ] Firmware integration (ESP32 control)
 - [ ] Final PCB
 - [ ] Experimental validation

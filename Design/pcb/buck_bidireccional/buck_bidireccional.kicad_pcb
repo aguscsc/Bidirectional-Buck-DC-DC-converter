@@ -82,7 +82,7 @@
 		(allow_soldermask_bridges_in_footprints no)
 		(tenting front back)
 		(pcbplotparams
-			(layerselection 0x00000000_00000000_55555555_55555554)
+			(layerselection 0x00000000_00000000_55555555_5755ddfc)
 			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
@@ -118,7 +118,7 @@
 			(mirror no)
 			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "./")
+			(outputdirectory "C:/Users/agusc/Desktop/pcbwat/")
 		)
 	)
 	(net 0 "")
@@ -10358,7 +10358,7 @@
 		)
 	)
 	(via
-		(at 185 84)
+		(at 185 84.5)
 		(size 2.95)
 		(drill 2.8)
 		(layers "F.Cu" "B.Cu")
@@ -10366,7 +10366,7 @@
 		(uuid "19c4e4aa-90c3-49a2-8a3c-84085c091ec2")
 	)
 	(via
-		(at 185 138)
+		(at 185 137.5)
 		(size 2.95)
 		(drill 2.8)
 		(layers "F.Cu" "B.Cu")
@@ -10374,7 +10374,7 @@
 		(uuid "6bca53cf-1f67-4e29-a2be-b0ae52023b16")
 	)
 	(via
-		(at 106.25 138.25)
+		(at 106 137.5)
 		(size 2.95)
 		(drill 2.8)
 		(layers "F.Cu" "B.Cu")
@@ -10382,7 +10382,7 @@
 		(uuid "86370980-9de8-450c-b5e0-aa9409b15af2")
 	)
 	(via
-		(at 106.25 84.25)
+		(at 106 84.5)
 		(size 2.95)
 		(drill 2.8)
 		(layers "F.Cu" "B.Cu")
@@ -11551,7 +11551,7 @@
 		)
 		(polygon
 			(pts
-				(xy 103.25 81.25) (xy 103.25 141.25) (xy 188 141.5) (xy 188.25 81)
+				(xy 103.176819 81.176819) (xy 103.13395 141.13395) (xy 188 141) (xy 188.059361 81.190639)
 			)
 		)
 		(filled_polygon
