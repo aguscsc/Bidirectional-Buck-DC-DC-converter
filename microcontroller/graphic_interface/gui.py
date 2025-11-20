@@ -363,11 +363,15 @@ def main():
     def send2controller(rounded_value, frec_var):
         if serial_connection and serial_connection.is_open:
             try:
-                duty_standarized = str(rounded_value * 10)
-                frec_standarized = frec_var[0:2]
-                if frec_standarized[0] == "1":
-                    frec_standarized.append("0")
+                duty_standarized = str(int((rounded_value * 10)))
+                if len(duty_standarized) > 3:
+                    duty_standarized = duty_standarized[:3]
+                elif len(duty_standarized) < 3:
+                    duty_standarized = duty_standarized.zfill(3)
+                if len(frec_var) > 3:
+                    frec_standarized = frec_var[:3]
                 else:
+                    frec_standarized = frec_var[:2]
                     frec_standarized = frec_standarized.zfill(3)
 
                 command_string_duty = f"D{duty_standarized}\n"
@@ -503,7 +507,7 @@ def main():
                 warn_var.set(0)
 
             # --- FIX: Send 100-D for BOOST ---
-            send2controller(100.0 - rounded_value, frec_var.get)
+            send2controller(100.0 - rounded_value, frec_var.get())
 
         duty_value_label.config(text=f"Duty: {rounded_value:.1f} %")  # 1 decimal
         draw_pwm_waveform(rounded_value)
