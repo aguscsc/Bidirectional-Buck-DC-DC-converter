@@ -4,7 +4,7 @@
 // 'C' source line config statements
 
 // DEVCFG3
-#pragma config USERID = 0xFFFF          // Enter Hexadecimal value (Enter Hexadecimal value)
+#pragma config USERID = 0x4742          // Enter Hexadecimal value (Enter Hexadecimal value)
 #pragma config FMIIEN = ON              // Ethernet RMII/MII Enable (MII Enabled)
 #pragma config FETHIO = ON              // Ethernet I/O Pin Select (Default Ethernet I/O)
 #pragma config PGL1WAY = ON             // Permission Group Lock One Way Configuration (Allow only one reconfiguration)
@@ -64,6 +64,12 @@
 
 #include <xc.h>
 #include <math.h>
+#include <string.h>
+#include <stdio.h>
+
+#define _XTAL_FREQ 180000000
+
+#define TICK_PER_MS (_XTAL_FREQ/2/1000)
 
 /*the lines above is the code genereted for the configuration bits, most of them are the default ones, the ones to note 
  * are the FNOSC and all of the DEVCFG2 register, FNOSC selects our system clock, in this case we want it to be the output
@@ -74,9 +80,21 @@
  * PIC32MZ Embedded Connectivity with Floating Point Unit (EF) - pag 640 
 */
 
+void __delay_ms(uint32_t ms)
+{
+uint32_t Start=_CP0_GET_COUNT();
+uint32_t Duration=TICK_PER_MS*ms;
+while((_CP0_GET_COUNT()-Start)<Duration);
+}
 
+void __delay_us(uint32_t ms)
+{
+uint32_t Start=_CP0_GET_COUNT();
+uint32_t Duration=TICK_PER_MS*ms/1000;
+while((_CP0_GET_COUNT()-Start)<Duration);
+}
 
-void PB3_setup(){
+void PB3and2_setup(){
 //setup for the peripheral bus clock 3, which is the one that the timers and OC use.
     
 //unlock sequence to change de divisor of the clk for better resolution of our PWM, 
@@ -87,6 +105,7 @@ SYSKEY = 0xAA996655;
 SYSKEY = 0x556699AA;
 
 PB3DIVbits.PBDIV = 0b0000000;
+PB2DIVbits.PBDIV = 0b0000000;
 
 // closing of system unlock
 
@@ -111,7 +130,7 @@ void Timer2and3_setup(){
     
     T3CONbits.ON = 0;
     T3CONbits.TCKPS = 0b000;
-    PR3 = 0xFFFF;
+    PR3 = 10;
     T3CONbits.ON = 1;
 
 }
@@ -133,7 +152,7 @@ void OC4_setup(){
     OC4CONbits.OCM = 0b110;
       
  // test
-    OC4RS = 1500;
+    OC4RS = 30;
 
 }
 
@@ -258,8 +277,39 @@ void IO_setup(){
  
  TRISBbits.TRISB2 = 1;
  ANSELBbits.ANSB2 = 1;
+ 
+//setup for the uart pins altough might be unnecesary but idk
+//PIC32MZ Embedded Connectivity with Floating Point Unit (EF) - pag 267 - 264
+ TRISFbits.TRISF2 = 0;
+ TRISFbits.TRISF13 = 1;
+ ANSELFbits.ANSF13 = 0;
+ RPF2Rbits.RPF2R = 0b0100;
+ U6RXRbits.U6RXR = 0b1001;
+
+ 
+ 
+ 
 
 }
+
+
+void UART_setup(){
+//im tired of commenting, maybe ill get back to it, you are just gonna have to trust me on this one gang
+    
+    
+    
+    U6BRG = 96;
+    
+    U6MODEbits.UEN = 0b00;
+    
+    U6STAbits.URXEN = 1;
+    U6STAbits.UTXEN = 1;
+    
+    U6MODEbits.ON = 1;
+
+
+}
+
 
 long map(long x, long in_min, long in_max, long out_min, long out_max) {
 //this map functioin will be used to map the output of the adc to the available value range for the OCxRS register
@@ -268,22 +318,134 @@ long map(long x, long in_min, long in_max, long out_min, long out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
+
+
+void Non_essential_setup(){
+//this is just me messing around
+    
+    
+    //LED 0
+    TRISJbits.TRISJ7 = 0;  
+    LATJbits.LATJ7 = 1;    
+    
+    //LED 1
+    TRISKbits.TRISK7 = 0;
+    LATKbits.LATK7 = 1;
+    //LED 2
+    TRISJbits.TRISJ3 = 0;
+    LATJbits.LATJ3 = 1;
+
+
+
+}
 //Author: Gian Luca Barbagelata, si esto funciona me vuelvo loco
 int main(void) {
  
-    PB3_setup();
+    PB3and2_setup();
     Timer2and3_setup();
     OC4_setup();
-    ADC_setup();
+    //ADC_setup();
     IO_setup();
-    
+    UART_setup();
+    Non_essential_setup();
 
+    int range;
+    
+    int freq, duty, f_PWM = 0;
+    char s[4] = {'\0', '\0', '\0', '\0'};
+    char data;
+    int select = 0;
+    int index=0;
+    double old_duty = 0;
+    
     while(1){
+        range = round(map(OC4RS,60,2940,0,9));
+  
+        //LED 2
+        if (range & 0b0001) LATJbits.LATJ3 = 0;
+        //LED 1
+        if (range & 0b0010) LATKbits.LATK7 = 0;
+        //LED 0
+        if (range & 0b0100) LATJbits.LATJ7 = 0;
+/*
+        if (range & 0b1000){        
+            LATJbits.LATJ3 = 0;
+            LATKbits.LATK7 = 0;
+            LATJbits.LATJ7 = 0;
+            __delay_ms(100);
+            LATJbits.LATJ3 = 1;
+            LATKbits.LATK7 = 1;
+            LATJbits.LATJ7 = 1;
+            __delay_ms(100);
+            LATJbits.LATJ3 = 0;
+            LATKbits.LATK7 = 0;
+            LATJbits.LATJ7 = 0;
+        }
         
-    while (ADCDSTAT1bits.ARDY2 == 0);
-      OC4RS = round(map(ADCDATA2,0,4096,0,2999));
       
-     }  
+        __delay_ms(100);
+        
+        LATJbits.LATJ3 = 1;
+        LATKbits.LATK7 = 1;
+        LATJbits.LATJ7 = 1;
+      */   
+        
+        while (U6STAbits.URXDA == 0);
+        data = U6RXREG;
+        
+        if (data == 'D'){
+            select = 0;
+            index = 0;
+            memset(s, '\0', sizeof(s));
+            continue;
+        }
+        else if (data == 'F'){
+            select = 1;
+            index = 0; 
+            memset(s, '\0', sizeof(s));
+            continue;  
+        }
+        
+        if (select == 0){
+            s[index] = data;
+            index++;
+            if (index == 3){
+                duty = atoi(s);
+                OC4RS = round(((double)(PR2+1)/1000)*duty);
+                index = 0;
+                memset(s, '\0', sizeof(s));
+                continue;
+            }
+            continue;
+        }
+            
+        if (select == 1){
+            s[index] = data;
+            index++;
+            if (index == 3){
+                old_duty = (double)OC4RS/(PR2+1);
+                freq = atoi(s);
+                f_PWM = freq * 1000;
+                PR2 = round(((double)_XTAL_FREQ/f_PWM) - 1);
+                OC4RS = old_duty*(PR2+1);
+                index = 0;
+                memset(s, '\0', sizeof(s));
+                continue;
+            }
+            continue;
+        }
+        
+        
+        /*
+        while (ADCDSTAT1bits.ARDY2 == 0);
+        OC4RS = round(map(ADCDATA2,0,4096,60,2940));
+        
+        */
+        
+      
+        
+       
+    }  
         
     
 
