@@ -19,7 +19,7 @@ def get_ports():
 
 
 serial_connection = None  # define to use globally
-nt(p1.x
+
 
 def main():
     # /-------------- CONFIG ------------------------------------/
