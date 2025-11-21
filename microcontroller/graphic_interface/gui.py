@@ -19,13 +19,13 @@ def get_ports():
 
 
 serial_connection = None  # define to use globally
-
+nt(p1.x
 
 def main():
     # /-------------- CONFIG ------------------------------------/
     root = tk.Tk()
     root.title("Buck Bidireccional Control")
-    root.geometry("800x600")
+    root.geometry("1920x1080")
     style = ttk.Style(root)
     style.theme_use("clam")
 
@@ -266,12 +266,26 @@ def main():
     # --- Custom Warning Popup Function ---
     def warning_popup(title, message):
         """Displays a styled, modal pop-up warning."""
+        duty_slider.config(state="disabled")
+        duty_button_up.config(state="disabled")
+        duty_button_down.config(state="disabled")
+
         if mode_var.get() == 1:
             warning_log("Keep Duty under 70%")
         elif mode_var.get() == 0:
             warning_log("Keep Duty under 60%")
 
+        def ok_command():
+            duty_slider.config(state="enabled")
+            duty_button_up.config(state="enabled")
+            duty_button_down.config(state="enabled")
+            popup.destroy()
+
         def back_command():
+            duty_slider.config(state="enabled")
+            duty_button_up.config(state="enabled")
+            duty_button_down.config(state="enabled")
+
             popup.destroy()
             if mode_var.get() == 1:
                 duty_var.set(50.0)
@@ -310,7 +324,7 @@ def main():
         message_label.pack(pady=(0, 20))
 
         ok_button = ttk.Button(
-            popup, text="OK", style="Primary.TButton", command=popup.destroy
+            popup, text="OK", style="Primary.TButton", command=ok_command
         )
         go_back_button = ttk.Button(
             popup, text="Go Back", command=back_command, style="TButton"
@@ -418,7 +432,7 @@ def main():
         current_mode = mode_var.get()
         duty_decimal = duty_cycle_percent / 100.0
 
-        v_high_label = "5V"
+        v_high_label = "3.3V"
         v_low_label = "0.0V"
 
         if current_mode == 1:  # BUCK
@@ -439,7 +453,7 @@ def main():
             width - 210,
             10,
             width - 10,
-            40,  # Made larger
+            40,
             fill="#e8db2a",
             outline="",
         )
