@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import serial.tools.list_ports
 import serial
+import math
 
 
 # get USB ports in use
@@ -119,8 +120,9 @@ def main():
     # --- Frequency combobox ----
 
     # --- frec change -----
-    def frec_change(event):
-        duty_change(str(duty_var))
+    def frec_change(_):
+        duty_change(str(duty_var.get()))
+        draw_frec(frec_var.get(), duty_var.get())
 
     ttk.Label(conn_frame, text="Frequency: ", font=("Inter", 10, "bold")).pack(
         side="left", padx=(0, 5)
@@ -129,7 +131,7 @@ def main():
     frec_combo = ttk.Combobox(
         conn_frame,
         textvariable=frec_var,
-        values=["10k", "20k", "30k", "40k", "50k", "60k", "70k", "80k", "90k", "100k"],
+        values=["30k", "40k", "50k", "60k", "70k", "80k", "90k", "100k"],
         width=8,
         state="readonly",
     )
@@ -195,6 +197,9 @@ def main():
         length=400,
     )
 
+    duty_set_button = ttk.Button(
+        duty_card, text="Set opertational point", width=4, style="Primary.TButton"
+    )
     duty_button_up = ttk.Button(
         button_frame, text="▲", style="Primary.TButton", width=2
     )
@@ -202,6 +207,7 @@ def main():
         button_frame, text="▼", style="Primary.TButton", width=2
     )
 
+    duty_set_button.pack(side="top", fill="x", padx=(1, 1))
     duty_button_up.pack(side="top", fill="x", pady=(0, 2))
     duty_button_down.pack(side="top", fill="x", pady=(2, 0))
     duty_slider.pack(side="left", fill="x", expand=True, padx=(10, 10))
@@ -255,11 +261,26 @@ def main():
     wave_frame = ttk.Frame(main_frame)
     wave_frame.pack(side="right", fill="both", expand=True)
 
+    # PWM signal
     wave_label = ttk.LabelFrame(wave_frame, text="PWM Signal", padding=10)
-    wave_label.pack(fill="both", expand=True)
+    wave_label.pack(side="bottom", fill="both", expand=True)
 
     canvas = tk.Canvas(wave_label, bg="#e0e0e0", highlightthickness=0)
     canvas.pack(fill="both", expand=True)
+
+    # voltage output graph
+    output_label = ttk.LabelFrame(wave_frame, text="Voltage output", padding=10)
+    output_label.pack(side="right", fill="both", expand=True)
+
+    output_canvas = tk.Canvas(output_label, bg="#e0e0e0", highlightthickness=0)
+    output_canvas.pack(fill="both", expand=True)
+
+    # Frequency graph
+    frec_label = ttk.LabelFrame(wave_frame, text="Frequency", padding=10)
+    frec_label.pack(side="left", fill="both", expand=True)
+
+    frec_canvas = tk.Canvas(frec_label, bg="#e0e0e0", highlightthickness=0)
+    frec_canvas.pack(fill="both", expand=True)
 
     # /--- ALL HELPER FUNCTIONS (Defined after widgets) ---/
 
@@ -395,15 +416,230 @@ def main():
                 serial_connection.write(command_string_frec.encode("utf-8"))
 
                 # uncomment to debbug commands sent to the microcontroller
-                update_log(f"Sent: {command_string_duty.strip()}")
-                update_log(f"Sent: {command_string_frec.strip()}\n")
+                # update_log(f"Sent: {command_string_duty.strip()}")
+                # update_log(f"Sent: {command_string_frec.strip()}\n")
 
             except serial.SerialException as e:
                 warning_log(f"Could not send data: {e}")
                 disconnect()  # Auto-disconnect on write error
         else:
-            if root.winfo_exists():  # Don't log on init
+            if root.winfo_exists():  # Don't log on inith
                 warning_log("Not connected. Cannot send duty.")
+
+    # // ---------------------------- Drawing Functions ----------------------------//
+    # --- Voltge output draw ---
+
+    def draw_output(target_canvas, duty_cycle_percent, mode_var, V_BUCK, V_BOOST, frec):
+        """
+        Draws a line representing the smoothed DC output voltage (V_avg)
+        with a small sinusoidal ripple based on the Buck/Boost mode.
+        """
+        RIPPLE_LOOKUP = {
+            30000.0: 0.022,
+            40000.0: 0.015,
+            50000.0: 0.011,
+            60000.0: 0.009,
+            70000.0: 0.008,
+            80000.0: 0.006,
+            90000.0: 0.0056,
+            100000.0: 0.0048,
+        }
+        target_canvas.delete("all")  # Use a tag to clear only the output line
+
+        width = target_canvas.winfo_width()
+        height = target_canvas.winfo_height()
+        if width <= 1 or height <= 1:
+            return
+
+        grid_color = "#000000"
+
+        for i in range(1, 10):
+            x = width * (i / 10.0)
+            target_canvas.create_line(x, 0, x, height, fill=grid_color, dash=(2, 4))
+
+        y_center = height / 2
+        target_canvas.create_line(
+            0, y_center, width, y_center, fill=grid_color, dash=(2, 4)
+        )
+
+        amplitude = height * 0.3
+        y_high = y_center - amplitude
+        y_low = y_center + amplitude
+
+        target_canvas.create_line(
+            0, y_high, width, y_high, fill=grid_color, dash=(4, 4)
+        )
+        target_canvas.create_line(0, y_low, width, y_low, fill=grid_color, dash=(4, 4))
+
+        duty_decimal = duty_cycle_percent / 100.0
+        current_mode = mode_var
+        f_value = float(frec.replace("k", "")) * 1000.0
+
+        v_ripple = RIPPLE_LOOKUP.get(f_value, 0.1)
+        # ---  Calculate Average Output Voltage (V_avg) ---
+        if current_mode == 1:  # BUCK
+            # V_out ≈ D * V_in * 0.93 (using the same formula from draw_pwm_waveform)
+            V_avg = V_BUCK * duty_decimal * 0.93
+
+            # Define max expected output voltage for scaling
+            V_max_display = 30.0
+
+        else:  # BOOST
+            # Define max expected output voltage for scaling
+            V_max_display = 100.0
+            if duty_decimal >= 0.99:
+                V_avg = (
+                    0.0  # Treat as zero or undefined for visualization near 100% duty
+                )
+            else:
+                # V_out ≈ V_in / (1 - D) * 0.87
+                v_ripple *= 2
+                V_avg = (0.87 * V_BOOST) / (1.0 - duty_decimal)
+
+        # ---  Scale V_avg and Ripple to Pixel Coordinates ---
+
+        y_center = height / 2
+        amplitude = height * 0.3
+        y_low = y_center + amplitude  # Represents 0V
+        y_high = y_center - amplitude  # Represents the max voltage (e.g., 3.3V)
+
+        #  y_low - 90% of height
+        V_scale_height = height * 0.9
+
+        # Clamp V_avg to V_max_display to prevent drawing off-screen
+        V_clamped = min(V_avg, V_max_display)
+
+        # Distance from the bottom (y_low) corresponding to V_avg
+        y_offset_from_low = (V_clamped / V_max_display) * V_scale_height
+        y_avg_px = y_low - y_offset_from_low
+
+        # Scale the ripple to pixel amplitude
+        ripple_amp_px = (v_ripple / 2) * (V_scale_height / V_max_display) * 100
+
+        # ---  Generate Ripple Points ---
+        points = []
+        num_points = 200  # Number of line segments
+        ripple_cycles = 6  # How many ripple oscillations to show across the screen
+
+        for i in range(num_points):
+            x = i * (width / num_points)
+
+            # Calculate sinusoidal offset
+            # math.sin(angle) * (amplitude)
+            sin_offset = (
+                math.sin(i * ripple_cycles * 2 * math.pi / num_points) * ripple_amp_px
+            )
+
+            y = y_avg_px + sin_offset
+
+            points.append((x, y))
+
+        # --- Draw the Ripple Line ---
+        flattened_points = [coord for point in points for coord in point]
+
+        target_canvas.create_line(
+            flattened_points,
+            width=2,
+            fill="#344ceb",  # Success/Green color for output
+            tag="output_ripple",
+        )
+
+        # --- Add V_avg label (Optional, if not already done by draw_pwm_waveform) ---
+        target_canvas.create_text(
+            width - 15,
+            y_avg_px - 40,
+            text=f"V_avg: {V_avg:.2f}V",
+            anchor="ne",
+            fill="#344ceb",
+            tag="output_ripple",
+        )
+
+    # --- Frequency Draw ---
+    def draw_frec(frec, duty_cycle_percent):
+        frec_canvas.delete("all")
+
+        frec_canvas.delete("all")
+        width = frec_canvas.winfo_width()
+        height = frec_canvas.winfo_height()
+        if width <= 1 or height <= 1:
+            return
+
+        grid_color = "#000000"
+        f_value = 60000.0
+
+        try:
+            f_value = float(frec.replace("k", "")) * 1000.0
+        except:
+            print("error parsing frec")
+
+        period = 1.0 / f_value
+        time_span = 32e-6
+
+        total_cycles = time_span / period
+        num_cycles = math.ceil(total_cycles)
+
+        for i in range(1, 10):
+            x = width * (i / 10.0)
+            frec_canvas.create_line(x, 0, x, height, fill=grid_color, dash=(2, 4))
+
+        y_center = height / 2
+        frec_canvas.create_line(
+            0, y_center, width, y_center, fill=grid_color, dash=(2, 4)
+        )
+
+        amplitude = height * 0.3
+        y_high = y_center - amplitude
+        y_low = y_center + amplitude
+
+        frec_canvas.create_line(0, y_high, width, y_high, fill=grid_color, dash=(4, 4))
+        frec_canvas.create_line(0, y_low, width, y_low, fill=grid_color, dash=(4, 4))
+
+        # singal
+
+        duty_decimal = duty_cycle_percent / 100.0
+        padding = 10
+        full_signal_width = max(0, width - padding * 2)
+        cycles_width = full_signal_width / total_cycles
+
+        on_width = cycles_width * duty_decimal
+        off_width = cycles_width - on_width
+
+        current_x = padding
+        points = [(current_x, y_low)]
+
+        for i in range(int(num_cycles)):
+            # first point
+            points.append((current_x, y_high))
+
+            # end of on time
+            current_x += on_width
+            points.append((current_x, y_high))
+
+            # first low point
+            points.append((current_x, y_low))
+
+            # off time
+            current_x += off_width
+            points.append((current_x, y_low))
+
+            # stop if canvas lenght is exceeded
+            if current_x > width - padding:
+                break
+
+        if points[-1][0] > width - padding:
+            points[-1] = (width - padding, points[-1][1])
+
+        # turns tupple into list
+        flat_points = [coord for point in points for coord in point]
+        frec_canvas.create_line(flat_points, width=3, fill="#4299e1")
+
+        frec_canvas.create_text(
+            width - 15,
+            17,
+            text=f"Frequency: {frec}Hz",
+            anchor="ne",
+            fill="#000",
+        )
 
     # --- Canvas Draw Function ---
     def draw_pwm_waveform(duty_cycle_percent):
@@ -436,13 +672,13 @@ def main():
         v_low_label = "0.0V"
 
         if current_mode == 1:  # BUCK
-            v_avg = V_BUCK * duty_decimal * 0.96
+            v_avg = V_BUCK * duty_decimal * 0.93
             v_avg_text = f"Buck V_out: {v_avg:.2f}V"
         else:  # BOOST
             if duty_decimal >= 0.99:
                 v_avg_text = "Boost V_out: ---"
             else:
-                v_avg = (0.93 * V_BOOST) / (1.0 - duty_decimal)
+                v_avg = (0.87 * V_BOOST) / (1.0 - duty_decimal)
                 v_avg_text = f"Boost V_out: {v_avg:.2f}V"
 
         canvas.create_text(10, y_high, text=v_high_label, anchor="w", fill="#555")
@@ -525,6 +761,33 @@ def main():
 
         duty_value_label.config(text=f"Duty: {rounded_value:.1f} %")  # 1 decimal
         draw_pwm_waveform(rounded_value)
+        draw_frec(frec_var.get(), duty_var.get())
+        draw_output(
+            output_canvas, duty_var.get(), mode_var.get(), 23, 12, frec_var.get()
+        )
+
+    def set_operational_point():
+        """sets operational point in smooth steps"""
+        if mode_var.get() == 1:
+            if duty_var.get() < 65:
+                while duty_var.get() < 65:
+                    duty_var.set(duty_var.get() + 0.2)
+                    # to show the smooth transition
+                    # print(duty_var.get())
+            else:
+                while duty_var.get() > 65:
+                    duty_var.set(duty_var.get() - 0.2)
+            duty_var.set(65)
+            duty_change(str(65))
+        elif mode_var.get() == 0:
+            if duty_var.get() < 55:
+                while duty_var.get() < 55:
+                    duty_var.set(duty_var.get() + 0.2)
+            else:
+                while duty_var.get() > 55:
+                    duty_var.set(duty_var.get() - 0.2)
+            duty_var.set(55)
+            duty_change(str(55))
 
     def up_duty():
         """Called by the Up button."""
@@ -603,7 +866,7 @@ def main():
     def disconnect():
         """Closes the active serial connection."""
         global serial_connection
-        # 1. Send "safe" command first, only if connected
+        #  Send "safe" command first, only if connected
         if serial_connection and serial_connection.is_open:
             try:
                 # Send a final "duty 0" command
@@ -615,12 +878,12 @@ def main():
                 warning_log(f"Error on disconnect: {e}")
                 serial_connection = None  # Force-set to None
 
-        # 2. Now that port is closed, update GUI
+        #  Now that port is closed, update GUI
         mode_var.set(1)
         duty_var.set(0.0)
         duty_change(str(0.0))  # Update GUI visuals (won't send)
 
-        # 3. Update buttons
+        #  Update buttons
         connect_button.config(state="normal")
         disconnect_button.config(state="disabled")
         refresh_button.config(state="normal")
@@ -641,6 +904,7 @@ def main():
     mode_buck.config(command=send_mode_buck)
     mode_boost.config(command=send_mode_boost)
     duty_slider.config(command=duty_change)
+    duty_set_button.config(command=set_operational_point)
     duty_button_up.config(command=up_duty)
     duty_button_down.config(command=down_duty)
     clear_log_button.config(command=clear_log)
@@ -648,8 +912,16 @@ def main():
     def on_resize(event):
         if event.widget == canvas:
             draw_pwm_waveform(duty_var.get())
+        elif event.widget == frec_canvas:
+            draw_frec(frec_var.get(), duty_var.get())
+        elif event.widget == output_canvas:
+            draw_output(
+                output_canvas, duty_var.get(), mode_var.get(), 23, 12, frec_var.get()
+            )
 
     canvas.bind("<Configure>", on_resize)
+    output_canvas.bind("<Configure>", on_resize)
+    frec_canvas.bind("<Configure>", on_resize)
 
     def on_closing():
         disconnect()
@@ -659,6 +931,10 @@ def main():
 
     def initial_draw():
         draw_pwm_waveform(duty_var.get())
+        draw_frec(frec_var.get(), duty_var.get())
+        draw_output(
+            output_canvas, duty_var.get(), mode_var.get(), 23, 12, frec_var.get()
+        )
 
     root.after(100, initial_draw)
 
