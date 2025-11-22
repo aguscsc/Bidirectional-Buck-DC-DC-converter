@@ -142,10 +142,17 @@ Here you can see the interface next to an example of a warning popup when going 
   <img src="pics/warning_gui.png" alt="gui_warn" width="800"/>
 </p>
 
-## Dependencies
+## How to use
+
+### Executable
+  
+In [here](/microcontroller/graphic_interface/executables) youll find executables to run on your machine.
+
+### Manual
+  
+You can also clone the repository and run it from the terminal
 
 **Pyserial**
-
 ```
 pip install pyserial
 ```

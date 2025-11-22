@@ -35,7 +35,7 @@ void loop() {
       // For an Arduino Nano, the PWM pins are 0-255
       // To convert 0-100% to 0-255, we multiply by 2.55
       int pwmValue = (int)(dutyCycle * 2.55);
-      analogWrite(3, pwmValue); // Example: Send to pin D3
+      analogWrite(11, pwmValue); // Example: Send to pin D3
       
       // 5. Send an "Acknowledgment" message back to Python
       Serial.print("ACK: Duty cycle set to ");
