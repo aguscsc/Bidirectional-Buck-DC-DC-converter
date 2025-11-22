@@ -26,7 +26,7 @@ def main():
     # /-------------- CONFIG ------------------------------------/
     root = tk.Tk()
     root.title("Buck Bidireccional Control")
-    root.geometry("1920x1080")
+    root.geometry("1344x756")
     style = ttk.Style(root)
     style.theme_use("clam")
 
