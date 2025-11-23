@@ -142,7 +142,7 @@ To ensure the correct operation of the microcontroller, first it was configured 
 |         & PLL         |      |     Compare Module    |      |           ADC         |      |    I/O & Peripherals  |
 +-----------------------+      +-----------------------+      +-----------------------+      +-----------------------+
 ```
-First, it is necessary to generate the system clock, to do this the POSC (primary Oscillator) was set to EC mode, generating a 12Mhz signal which was scaled using the PLL [data_sheets](/microcontroller/Datasheets\used/), then feeding a voltage signal controlled with a potentiometer to the ADC the pwm signal was generated. 
+First, it is necessary to generate the system clock, to do this the POSC (primary Oscillator) was set to EC mode, generating a 12Mhz signal which was scaled using the PLL [data_sheets](/microcontroller/Datasheets), then feeding a voltage signal controlled with a potentiometer to the ADC the pwm signal was generated. 
 
 Once peripherals were working as expected, a graphic interface was integrated to replace the potentiometer, allowing for control over the mode, duty and frequency at which the converter operated.
 
