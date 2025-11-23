@@ -15,7 +15,7 @@ def get_ports():
             name = f"{port.device} | {port.description}"
             usb.append(name)
     if not usb:
-        usb.append("No ports found")
+        usb.append("No se encontraron puertos")
     return usb
 
 
@@ -26,7 +26,7 @@ def main():
     # /-------------- CONFIG ------------------------------------/
     root = tk.Tk()
     root.title("Buck Bidireccional Control")
-    root.geometry("1920x1080")
+    root.geometry("1344x756")
     style = ttk.Style(root)
     style.theme_use("clam")
 
@@ -87,7 +87,7 @@ def main():
     conn_frame = ttk.Frame(root, padding=(20, 10))
     conn_frame.pack(fill="x", side="top")
 
-    ttk.Label(conn_frame, text="Connection Port: ", font=("Inter", 10, "bold")).pack(
+    ttk.Label(conn_frame, text="Puerto de conexión: ", font=("Inter", 10, "bold")).pack(
         side="left", padx=(0, 5)
     )
 
@@ -124,7 +124,7 @@ def main():
         duty_change(str(duty_var.get()))
         draw_frec(frec_var.get(), duty_var.get())
 
-    ttk.Label(conn_frame, text="Frecuencia: ", font=("Inter", 10, "bold")).pack(
+    ttk.Label(conn_frame, text="Frequency: ", font=("Inter", 10, "bold")).pack(
         side="left", padx=(0, 5)
     )
     frec_var = tk.StringVar(value="60k")
@@ -139,14 +139,14 @@ def main():
     frec_combo.pack(side="left", padx=5)
 
     # -- buttons --
-    refresh_button = ttk.Button(conn_frame, text="Refresh", style="Primary.TButton")
+    refresh_button = ttk.Button(conn_frame, text="Refrescar", style="Primary.TButton")
     refresh_button.pack(side="left", padx=5)
 
-    connect_button = ttk.Button(conn_frame, text="Connect", style="TButton")
+    connect_button = ttk.Button(conn_frame, text="Connectar", style="TButton")
     connect_button.pack(side="left", padx=5)
 
     disconnect_button = ttk.Button(
-        conn_frame, text="Disconnect", style="Danger.TButton", state="disabled"
+        conn_frame, text="Desconectar", style="Danger.TButton", state="disabled"
     )
     disconnect_button.pack(side="left", padx=5)
 
@@ -159,7 +159,7 @@ def main():
     control_frame.pack(side="left", fill="y", padx=(0, 10))
 
     # --- Mode Card ---
-    mode_card = ttk.LabelFrame(control_frame, text="Mode Control", padding=15)
+    mode_card = ttk.LabelFrame(control_frame, text="Control de Modo", padding=15)
     mode_card.pack(fill="x", pady=(0, 20))
 
     mode_buck = ttk.Button(mode_card, text="BUCK", style="Primary.TButton")
@@ -198,10 +198,7 @@ def main():
     )
 
     duty_set_button = ttk.Button(
-        duty_card,
-        text="Punto operacional recomendado",
-        width=4,
-        style="Primary.TButton",
+        duty_card, text="Puntor de operación", width=4, style="Primary.TButton"
     )
     duty_button_up = ttk.Button(
         button_frame, text="▲", style="Primary.TButton", width=2
@@ -218,9 +215,7 @@ def main():
     slider_frame.pack(fill="x", pady=(5, 0))
 
     # Step Size Dropdown
-    step_label = ttk.Label(
-        duty_card, text="Tamaño de paso: ", font=("Inter", 10, "bold")
-    )
+    step_label = ttk.Label(duty_card, text="Tamaño de paso: ", font=("Inter", 10, "bold"))
     step_label.pack(side="left", pady=(5, 0))  # Pack to left
     step_frame = ttk.Combobox(
         duty_card,
@@ -251,7 +246,7 @@ def main():
         highlightthickness=0,
     )
 
-    clear_log_button = ttk.Button(log_card, text="Clear Log", style="TButton")
+    clear_log_button = ttk.Button(log_card, text="Limpiar Log", style="TButton")
     clear_log_button.pack(side="bottom", fill="x", pady=(5, 0))
 
     # Configure tags *after* creating the widget
@@ -267,21 +262,21 @@ def main():
     wave_frame.pack(side="right", fill="both", expand=True)
 
     # PWM signal
-    wave_label = ttk.LabelFrame(wave_frame, text="PWM Signal", padding=10)
+    wave_label = ttk.LabelFrame(wave_frame, text="Señal PWM", padding=10)
     wave_label.pack(side="bottom", fill="both", expand=True)
 
     canvas = tk.Canvas(wave_label, bg="#e0e0e0", highlightthickness=0)
     canvas.pack(fill="both", expand=True)
 
     # voltage output graph
-    output_label = ttk.LabelFrame(wave_frame, text="Voltage output", padding=10)
+    output_label = ttk.LabelFrame(wave_frame, text="Voltaje de salida", padding=10)
     output_label.pack(side="right", fill="both", expand=True)
 
     output_canvas = tk.Canvas(output_label, bg="#e0e0e0", highlightthickness=0)
     output_canvas.pack(fill="both", expand=True)
 
     # Frequency graph
-    frec_label = ttk.LabelFrame(wave_frame, text="Frequency", padding=10)
+    frec_label = ttk.LabelFrame(wave_frame, text="Frecuencia", padding=10)
     frec_label.pack(side="left", fill="both", expand=True)
 
     frec_canvas = tk.Canvas(frec_label, bg="#e0e0e0", highlightthickness=0)
@@ -295,23 +290,28 @@ def main():
         duty_slider.config(state="disabled")
         duty_button_up.config(state="disabled")
         duty_button_down.config(state="disabled")
+        duty_set_button.config(state="disabled")
+        mode_boost.config(state="disabled")
+        mode_buck.config(state="disabled")
 
         if mode_var.get() == 1:
-            warning_log("Mantener bajo 70%")
+            warning_log("Keep Duty under 70%")
         elif mode_var.get() == 0:
-            warning_log("Mantener bajo 60%")
+            warning_log("Keep Duty under 60%")
 
-        def ok_command():
+        def enable_controls():
             duty_slider.config(state="enabled")
             duty_button_up.config(state="enabled")
             duty_button_down.config(state="enabled")
+            duty_set_button.config(state="enabled")
+            mode_boost.config(state="enabled")
+            mode_buck.config(state="enabled")
+        def ok_command():
+            enable_controls()
             popup.destroy()
 
         def back_command():
-            duty_slider.config(state="enabled")
-            duty_button_up.config(state="enabled")
-            duty_button_down.config(state="enabled")
-
+            enable_controls()
             popup.destroy()
             if mode_var.get() == 1:
                 duty_var.set(50.0)
@@ -358,6 +358,10 @@ def main():
         ok_button.pack(side="left", fill="x", expand=True, padx=(0, 5))
         go_back_button.pack(side="right", fill="x", expand=True, padx=(5, 0))
 
+        def on_popup_close():
+            enable_controls()
+            popup.destroy()
+        popup.protocol("WM_DELETE_WINDOW", on_popup_close)
         # Calculate position to center on root
         root.update_idletasks()
         root_x = root.winfo_x()
@@ -425,11 +429,11 @@ def main():
                 # update_log(f"Sent: {command_string_frec.strip()}\n")
 
             except serial.SerialException as e:
-                warning_log(f"Could not send data: {e}")
+                warning_log(f"No se pudieron mandar datos: {e}")
                 disconnect()  # Auto-disconnect on write error
         else:
             if root.winfo_exists():  # Don't log on inith
-                warning_log("Not connected. Cannot send duty.")
+                warning_log("No conectado. No es posible mandar Duty.")
 
     # // ---------------------------- Drawing Functions ----------------------------//
     # --- Voltge output draw ---
@@ -480,7 +484,7 @@ def main():
         current_mode = mode_var
         f_value = float(frec.replace("k", "")) * 1000.0
 
-        v_ripple = RIPPLE_LOOKUP.get(f_value, 0.01)
+        v_ripple = RIPPLE_LOOKUP.get(f_value, 0.1)
         # ---  Calculate Average Output Voltage (V_avg) ---
         if current_mode == 1:  # BUCK
             # V_out ≈ D * V_in * 0.93 (using the same formula from draw_pwm_waveform)
@@ -497,8 +501,8 @@ def main():
                     0.0  # Treat as zero or undefined for visualization near 100% duty
                 )
             else:
-                v_ripple *= 2
                 # V_out ≈ V_in / (1 - D) * 0.87
+                v_ripple *= 2
                 V_avg = (0.87 * V_BOOST) / (1.0 - duty_decimal)
 
         # ---  Scale V_avg and Ripple to Pixel Coordinates ---
@@ -575,7 +579,7 @@ def main():
         try:
             f_value = float(frec.replace("k", "")) * 1000.0
         except:
-            print("error parsing frec")
+            print("error parseando la frecuencia")
 
         period = 1.0 / f_value
         time_span = 32e-6
@@ -738,11 +742,11 @@ def main():
             if rounded_value > 70:
                 if warn_var.get() == 0:
                     warn_var.set(1)
-                    warning_popup("ADVERTENCIA", "Punto de operación excedido")
+                    warning_popup("ADVERTENCIA", "Sobre el punto de Operación sugerido")
                     if duty_var.get() != rounded_value:
                         return
             elif rounded_value == 65:
-                update_log("El punto de operación sugerido es 65 %")
+                update_log("Punto de operación sugerido 65 %")
             elif rounded_value < 70:
                 warn_var.set(0)
 
@@ -752,12 +756,12 @@ def main():
             if rounded_value > 60:
                 if warn_var.get() == 0:
                     warn_var.set(1)
-                    warning_popup("ADVERTENCIA", "Punto de operación excedido")
+                    warning_popup("ADVERTENCIA", "Sobre el punto de operación sugerido")
                     if duty_var.get() != rounded_value:
                         return
             # --- FIX: Use 'and', not '&' ---
             elif rounded_value == 55 and mode_var.get() == 0:
-                update_log("Suggested operation point 55 %")
+                update_log("Punto de operación sugerido 55 %")
             elif rounded_value < 60:
                 warn_var.set(0)
 
@@ -815,7 +819,7 @@ def main():
         mode_buck.config(style="Primary.TButton")
         mode_boost.config(style="TButton")
         mode_var.set(1)
-        update_log("Buck Mode activado")
+        update_log("Modo Buck activado")
 
         # No need to send M:1
 
@@ -826,7 +830,7 @@ def main():
         mode_boost.config(style="Primary.TButton")
         mode_buck.config(style="TButton")
         mode_var.set(0)
-        update_log("Boost Mode activado")
+        update_log("Modo Boost activado")
 
         # No need to send M:0
 
@@ -852,7 +856,7 @@ def main():
             try:
                 send_mode_buck()
             except:
-                update_log("Buck mode falló")
+                update_log("Buck mode failed")
             connect_button.config(state="disabled")
             disconnect_button.config(state="normal")
             refresh_button.config(state="disabled")
@@ -865,7 +869,7 @@ def main():
             duty_change(str(0.0))
 
         except serial.SerialException as e:
-            warning_log(f"Conexión Fallida: {e}")
+            warning_log(f"Falló al conectar: {e}")
             serial_connection = None
 
     def disconnect():
