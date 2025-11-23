@@ -129,18 +129,19 @@ First the [Curiosity PIC32MZEF2](Datasheets/PIC32/Curiosity_PIC32MZEF2.0_Develop
 To ensure the correct operation of the microcontroller, first it was configured to control the PWM signal via the analog to digital converter, mapping its input to duty cycle levels. The steps followed were:
 
 
-+-------------------------+         +-------------------------+       +-------------------------+         +-------------------------+
-|      Start: Create      |         |     Config Output       |------>|      Config Timer       |         |     End: Compile &      |
-|    PWM Generation Code  |         |    Compare I/O Pins     |       |       Registers         |         |   Load Code to PIC32    |
-+-------------------------+         +-------------------------+       +-------------------------+         +-------------------------+
-             |                                   ^                                 |                                   ^
-             |                                   |                                 |                                   |
-             v                                   |                                 v                                   |
-+-------------------------+         +-------------------------+       +-------------------------+         +-------------------------+
-|    Config Oscillator    |-------->|     Config Output       |       |       Config the        |-------->|     Init Remaining      |
-|          & PLL          |         |     Compare Module      |       |           ADC           |         |    I/O & Peripherals    |
-+-------------------------+         +-------------------------+       +-------------------------+         +-------------------------+
-
+```
++-----------------------+      +-----------------------+      +-----------------------+      +-----------------------+
+|     Start: Create     |      |     Config Output     |----->|      Config Timer     |      |     End: Compile &    |
+|  PWM Generation Code  |      |    Compare I/O Pins   |      |        Registers      |      |   Load Code to PIC32  |
++-----------------------+      +-----------------------+      +-----------------------+      +-----------------------+
+            |                              ^                              |                              ^
+            |                              |                              |                              |
+            v                              |                              v                              |
++-----------------------+      +-----------------------+      +-----------------------+      +-----------------------+
+|   Config Oscillator   |----->|     Config Output     |      |       Config the      |----->|     Init Remaining    |
+|         & PLL         |      |     Compare Module    |      |           ADC         |      |    I/O & Peripherals  |
++-----------------------+      +-----------------------+      +-----------------------+      +-----------------------+
+```
 First, it is necessary to generate the system clock, to do this the POSC (primary Oscillator) was set to EC mode, generating a 12Mhz signal which was scaled using the PLL [data_sheets](microcontroller/Datasheets\ used/), then feeding a voltage signal controlled with a potentiometer to the ADC the pwm signal was generated. 
 
 Once peripherals were working as expected, a graphic interface was integrated to replace the potentiometer, allowing for control over the mode, duty and frequency at which the converter operated.
