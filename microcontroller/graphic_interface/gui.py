@@ -290,23 +290,28 @@ def main():
         duty_slider.config(state="disabled")
         duty_button_up.config(state="disabled")
         duty_button_down.config(state="disabled")
+        duty_set_button.config(state="disabled")
+        mode_boost.config(state="disabled")
+        mode_buck.config(state="disabled")
 
         if mode_var.get() == 1:
             warning_log("Keep Duty under 70%")
         elif mode_var.get() == 0:
             warning_log("Keep Duty under 60%")
 
-        def ok_command():
+        def enable_controls():
             duty_slider.config(state="enabled")
             duty_button_up.config(state="enabled")
             duty_button_down.config(state="enabled")
+            duty_set_button.config(state="enabled")
+            mode_boost.config(state="enabled")
+            mode_buck.config(state="enabled")
+        def ok_command():
+            enable_controls()
             popup.destroy()
 
         def back_command():
-            duty_slider.config(state="enabled")
-            duty_button_up.config(state="enabled")
-            duty_button_down.config(state="enabled")
-
+            enable_controls()
             popup.destroy()
             if mode_var.get() == 1:
                 duty_var.set(50.0)
@@ -353,6 +358,10 @@ def main():
         ok_button.pack(side="left", fill="x", expand=True, padx=(0, 5))
         go_back_button.pack(side="right", fill="x", expand=True, padx=(5, 0))
 
+        def on_popup_close():
+            enable_controls()
+            popup.destroy()
+        popup.protocol("WM_DELETE_WINDOW", on_popup_close)
         # Calculate position to center on root
         root.update_idletasks()
         root_x = root.winfo_x()
