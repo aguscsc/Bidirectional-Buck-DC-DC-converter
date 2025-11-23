@@ -7,6 +7,7 @@ import math
 
 # get USB ports in use
 def get_ports():
+    # scans ports in your machine
     ports = serial.tools.list_ports.comports()
     usb = []
     # filter ports
@@ -306,6 +307,7 @@ def main():
             duty_set_button.config(state="enabled")
             mode_boost.config(state="enabled")
             mode_buck.config(state="enabled")
+
         def ok_command():
             enable_controls()
             popup.destroy()
@@ -361,6 +363,7 @@ def main():
         def on_popup_close():
             enable_controls()
             popup.destroy()
+
         popup.protocol("WM_DELETE_WINDOW", on_popup_close)
         # Calculate position to center on root
         root.update_idletasks()
@@ -421,6 +424,7 @@ def main():
                 command_string_duty = f"D{duty_standarized}\n"
                 command_string_frec = f"F{frec_standarized}\n"
 
+                # python strings works with unicode, we encode to utf-8 so chars have a defined length
                 serial_connection.write(command_string_duty.encode("utf-8"))
                 serial_connection.write(command_string_frec.encode("utf-8"))
 
@@ -650,7 +654,8 @@ def main():
             fill="#000",
         )
 
-    # --- Canvas Draw Function ---
+    # --- Canvas
+    # python strings works with unicode, we encode to utf-8 so chars have a defined length ---
     def draw_pwm_waveform(duty_cycle_percent):
         canvas.delete("all")
         width = canvas.winfo_width()
@@ -728,6 +733,7 @@ def main():
     # --- Duty Slider Functions ---
     def duty_change(value_str):
         """Called when the duty slider is moved OR var is set."""
+        # it has to take a string so it talks with the duty slider
         try:
             value = float(value_str)
         except ValueError:
@@ -840,6 +846,7 @@ def main():
     # --- Connection Functions ---
     def connect():
         """Establishes a serial connection to the selected port."""
+        # has to be global because we manipulate the variable
         global serial_connection
         port_full_name = com_port_var.get()
 

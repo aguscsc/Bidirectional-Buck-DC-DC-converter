@@ -48,12 +48,12 @@ Diagram (preliminary):
   Where:
   - \($I_{sat}$\) = Saturation current
   - \($B_{sat}$\) = saturation flux density of the core material
-  - \($l$\) = effective magnetic path lenght of the core
+  - \($l$\) = effective magnetic path length of the core
   - \($\mu_{0}$\) = permeability of a vacuum
   - \($\mu_{r}$\) = relative permeability of the material
   - \($N$\) = number of turns
 
-Recomendation: use coil64 to check your calculations, research skin effect and how different AWG interact with the frequency you're using (https://en.wikipedia.org/wiki/Skin_effect).
+Recommendation: use coil64 to check your calculations, research skin effect and how different AWG interact with the frequency you're using (https://en.wikipedia.org/wiki/Skin_effect).
 ### Capacitor
 - To be dimensioned from capacitor current balance:
 - buck
@@ -75,21 +75,21 @@ Recomendation: use coil64 to check your calculations, research skin effect and h
 
 ---
 # Prototyping 
-This section breaks down the process of prototyping and testing, the pcb in the design directory contains all the mesaures necessary to ensure the converter is working properly (value of components can be adjusted to your needs).
+This section breaks down the process of prototyping and testing, the pcb in the design directory contains all the measures necessary to ensure the converter is working properly (value of components can be adjusted to your needs).
 ## BOM:
 - 2 electrolytic capacitors $6.8\mu F$ and $2.2\mu F$ 50V each. 
 - 2 ceramic capacitors (100nF).
-- core T106-26 + 9m of AWG 26 cable (higher permeability would also work if the saturation stays sensible).
+- core T106-26 + 9m of AWG 26 wire (higher permeability would also work if the saturation stays sensible).
 - 2 IFRZ44N (great for prototyping and testing)
 - IR2184 driver (it can generate both MOSFET signals)
 - 2 10 ohm gate resistors 1W (it limits the gate current)
-- 2 10k ohm pulldown resistor 1W (drains the gate source capacitance)
+- 2 10k ohm pull-down resistor 1W (drains the gate source capacitance)
  ![Prototype](pics/bucksito_comp.jpg)
 ## Measurements and tests
-### Conmutation
-First, you ought to make sure the MOSFET are conmutating correctly. For this, turn on the pwm signal and your VCC source, then measure the pins gate-source of each MOSFET with an oscilloscope and make sure the signals are the complement of each other and respond to the change in duty. Aditionally, you should measure the gate current to ensure it is not exceeding the drivers capacity.
+### switching
+First, you ought to make sure the MOSFET are switching correctly. For this, turn on the pwm signal and your VCC source, then measure the gate-source pins of each MOSFET with an oscilloscope and make sure the signals are the complement of each other and respond to the change in duty. Aditionally, you should measure the gate current to ensure it is not exceeding the drivers capacity.
 <p>
-  <img src="pics/conmutate.jpeg" alt="conmutation" width="600"/>
+  <img src="pics/conmutate.jpeg" alt="switching" width="600"/>
 </p>
 
 ### Powering the circuit
@@ -97,7 +97,7 @@ Check the waveforms of the inductor current and output voltage, ideally you shou
 ![testing](pics/oscilloscoping_comp.jpg)
 Once you have ensured the inductor current and the output voltage have satisfied your needs you can proceed to measure the converters effiency for each mode.
 
-Note: if you struggle achieving the voltage ripple required, considering soldering ceramic capacitors paralell to your current ones.
+Note: if you struggle achieving the voltage ripple required, considering soldering ceramic capacitors parallel to your current ones.
 ### Efficiency 
 **BUCK** R = $39.8$
 
@@ -122,11 +122,35 @@ Note: if you struggle achieving the voltage ripple required, considering solderi
 Previously, the pwm signal was generated with a waveform generator, for real applications this has to be implemented with a microcontroller, in this case we'll use a PIC32 to generate the pwm signal.
 This section will cover the programming and testing of the control system and its integration with the power circuit.
 
+## Prototyping
+
+First the [Curiosity PIC32MZEF2](Datasheets/PIC32/Curiosity_PIC32MZEF2.0_Development_Board_Users_Guide_DS80005400A.pdf) board was used to program and debug the pic32, this board comes equipped with a PICKit on board 4 to program and the debug the microcontroller using [MPLABX](https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide).
+
+To ensure the correct operation of the microcontroller, first it was configured to control the PWM signal via the analog to digital converter, mapping its input to duty cycle levels. The steps followed were:
+
+
++-------------------------+         +-------------------------+       +-------------------------+         +-------------------------+
+|      Start: Create      |         |     Config Output       |------>|      Config Timer       |         |     End: Compile &      |
+|    PWM Generation Code  |         |    Compare I/O Pins     |       |       Registers         |         |   Load Code to PIC32    |
++-------------------------+         +-------------------------+       +-------------------------+         +-------------------------+
+             |                                   ^                                 |                                   ^
+             |                                   |                                 |                                   |
+             v                                   |                                 v                                   |
++-------------------------+         +-------------------------+       +-------------------------+         +-------------------------+
+|    Config Oscillator    |-------->|     Config Output       |       |       Config the        |-------->|     Init Remaining      |
+|          & PLL          |         |     Compare Module      |       |           ADC           |         |    I/O & Peripherals    |
++-------------------------+         +-------------------------+       +-------------------------+         +-------------------------+
+
+First, it is necessary to generate the system clock, to do this the POSC (primary Oscillator) was set to EC mode, generating a 12Mhz signal which was scaled using the PLL [data_sheets](microcontroller/Datasheets\ used/), then feeding a voltage signal controlled with a potentiometer to the ADC the pwm signal was generated. 
+
+Once peripherals were working as expected, a graphic interface was integrated to replace the potentiometer, allowing for control over the mode, duty and frequency at which the converter operated.
+
+
 # Graphical Interface
-To control the microntoller used for the PWM signal, a graphical interface is designed, the criteria followed for the design were:
+To control the microcontroller used for the PWM signal, a graphical interface is designed, the criteria followed for the design were:
 
 - Intuitive
-- Ease to switch between modes
+- Easy to switch between modes
 - Secure, it must limit human error as much as possible without harming the user's experience
 - Use of non distracting colors
 - It must have a visual representation of the signal and voltage output
@@ -146,39 +170,44 @@ Here you can see the interface next to an example of a warning popup when going 
 
 ### Executable
   
-In [here](/microcontroller/graphic_interface/executables) youll find executables to run on your machine.
+In [here](/microcontroller/graphic_interface/executables) you will find executables to run on your machine (Linux and Windows are currently supported).
 
 ### Manual
-  
-You can also clone the repository and run it from the terminal
 
-**Pyserial**
-```
-pip install pyserial
-```
-## How to use
+**1. Clone the repository**
 
 ```
 git clone https://github.com/aguscsc/Bidirectional-Buck-DC-DC-converter.git
 cd Bidirectional-Buck-DC-DC-converter/microcontroller/graphic_interface
+```
+
+**2. Dependencies**
+
+```
+pip install pyserial
+```
+
+**3. Run gui.py**
+
+```
 python gui.py
 ```
+
 **Spanish version**
 
 ```
 python es_gui.py
 ```
 ## ✅ TODO   
-- [ ] PIC32 control
 - [ ] Firmware integration (ESP32 control)
 - [ ] Final PCB
 - [ ] Experimental validation
 ---
 
 ## 👥 Collaborators
-- **[Agustín Torres](\ https://github.com/aguscsc \)**  
-- **[Ignacio Cerda](\ https://github.com/LovesCharlie \)**  
-- **[Gian Luca Barbagelata](\ https://github.com/Yian-n \)**  
+- **[Agustín Torres](https://github.com/aguscsc)**  
+- **[Ignacio Cerda](https://github.com/LovesCharlie)**  
+- **[Gian Luca Barbagelata](https://github.com/Yian-n)**  
 
 ---
 
