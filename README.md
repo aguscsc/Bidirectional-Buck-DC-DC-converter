@@ -199,10 +199,15 @@ python gui.py
 ```
 python es_gui.py
 ```
+
+## Final PCB
+
+The final PCB design consolidates all previously discussed subsystems into a single, compact board. It integrates the custom power stage, two voltage regulators to supply the gate driver and the PIC32 microcontroller, and a USB-C port to interface with the graphical control software.
+
+![FINAL pcb](/pics/PCB_final.png)
+
 ## ✅ TODO   
 - [ ] Firmware integration (ESP32 control)
-- [ ] Final PCB
-- [ ] Experimental validation
 ---
 
 ## 👥 Collaborators
