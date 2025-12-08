@@ -1,0 +1,2 @@
+source /home/wepi/github/Bidirectional-Buck-DC-DC-converter/microcontroller/esp32/voltage_sensor/build/gdbinit/symbols
+source /home/wepi/github/Bidirectional-Buck-DC-DC-converter/microcontroller/esp32/voltage_sensor/build/gdbinit/connect
