@@ -3,6 +3,9 @@ from tkinter import ttk
 import serial.tools.list_ports
 import serial
 import math
+import socket
+import threading
+import re
 
 
 # get USB ports in use
@@ -42,10 +45,6 @@ def main():
     # --- App-wide variables ---
     mode_var = tk.IntVar(value=1)  # 1 = BUCK, 0 = BOOST
     warn_var = tk.IntVar(value=0)  # For tracking popup
-
-    # Voltages
-    V_BUCK = 23
-    V_BOOST = 12
 
     # --- Style Config ---
     style.configure("TFrame", background=BG_COLOR)
@@ -118,40 +117,39 @@ def main():
     baud_frame.pack(side="left", padx=5)
 
     # --- Frequency Slider ---
-    # Variable de frecuencia 
-    frec_var = tk.DoubleVar(value=60.0) # Valor inicial 60 kHz
+    # Variable de frecuencia
+    frec_var = tk.DoubleVar(value=60.0)  # Valor inicial 60 kHz
 
-    
     def frec_slider_change(value_str):
         try:
             val = float(value_str)
         except ValueError:
-            val = 60.0 
+            val = 60.0
         rounded_frec = round(val, 0)
         frec_value_label.config(text=f"{int(rounded_frec)} kHz")
-        duty_change(str(duty_var.get())) 
+        duty_change(str(duty_var.get()))
 
     ttk.Label(conn_frame, text="Frecuencia:", font=("Inter", 10, "bold")).pack(
         side="left", padx=(10, 5)
     )
 
-    # Frame para el slider de frecuencia 
+    # Frame para el slider de frecuencia
     frec_frame = ttk.Frame(conn_frame)
     frec_frame.pack(side="left", padx=5)
 
     # Etiqueta de valor
     frec_value_label = ttk.Label(frec_frame, text=f"{int(frec_var.get())} kHz", width=8)
-    frec_value_label.pack(side="left", padx=(0,5))
+    frec_value_label.pack(side="left", padx=(0, 5))
 
     # Slider
     frec_slider = ttk.Scale(
         frec_frame,
-        from_=40,   
-        to=80,      
+        from_=40,
+        to=80,
         orient="horizontal",
         variable=frec_var,
         length=150,
-        command=frec_slider_change # Vinculación
+        command=frec_slider_change,  # Vinculación
     )
     frec_slider.pack(side="left")
 
@@ -196,6 +194,11 @@ def main():
     duty_var = tk.DoubleVar(value=0)
     step_size = tk.DoubleVar(value=0.5)  # Define step_size here
 
+    # --- Telemetry Variables (UDP) ---
+    live_buck_var = tk.DoubleVar(value=0.0)
+    live_boost_var = tk.DoubleVar(value=0.0)
+    stop_udp_thread = False  # Flag to kill thread on close
+
     duty_value_label = ttk.Label(
         duty_card, text=f"{duty_var.get():.2f} %", font=("Inter", 12, "bold")
     )
@@ -232,7 +235,9 @@ def main():
     slider_frame.pack(fill="x", pady=(5, 0))
 
     # Step Size Dropdown
-    step_label = ttk.Label(duty_card, text="Tamaño de paso: ", font=("Inter", 10, "bold"))
+    step_label = ttk.Label(
+        duty_card, text="Tamaño de paso: ", font=("Inter", 10, "bold")
+    )
     step_label.pack(side="left", pady=(5, 0))  # Pack to left
     step_frame = ttk.Combobox(
         duty_card,
@@ -311,7 +316,7 @@ def main():
         mode_boost.config(state="disabled")
         mode_buck.config(state="disabled")
         # También deshabilitamos el slider de frecuencia en alertas
-        frec_slider.config(state="disabled") 
+        frec_slider.config(state="disabled")
 
         if mode_var.get() == 1:
             warning_log("Keep Duty under 70%")
@@ -325,7 +330,7 @@ def main():
             duty_set_button.config(state="enabled")
             mode_boost.config(state="enabled")
             mode_buck.config(state="enabled")
-            frec_slider.config(state="enabled") # Reactivar frecuencia
+            frec_slider.config(state="enabled")  # Reactivar frecuencia
 
         def ok_command():
             enable_controls()
@@ -382,6 +387,7 @@ def main():
         def on_popup_close():
             enable_controls()
             popup.destroy()
+
         popup.protocol("WM_DELETE_WINDOW", on_popup_close)
         # Calculate position to center on root
         root.update_idletasks()
@@ -431,13 +437,13 @@ def main():
                 # ### --- CAMBIO: Formateo de frecuencia como número ---
                 # Ahora frec_val es un float (ej. 60.0), no string "60k"
                 duty_standarized = str(int((rounded_value * 10)))
-                frec_standarized = str(int(frec_val)) # Ej. "60"
+                frec_standarized = str(int(frec_val))  # Ej. "60"
 
                 if len(duty_standarized) > 3:
                     duty_standarized = duty_standarized[:3]
                 elif len(duty_standarized) < 3:
                     duty_standarized = duty_standarized.zfill(3)
-                
+
                 # Protocolo de 3 dígitos para frecuencia (ej. 060 para 60kHz)
                 if len(frec_standarized) > 3:
                     frec_standarized = frec_standarized[:3]
@@ -464,7 +470,9 @@ def main():
     # // ---------------------------- Drawing Functions ----------------------------//
     # --- Voltge output draw ---
 
-    def draw_output(target_canvas, duty_cycle_percent, mode_var, V_BUCK, V_BOOST, frec):
+    def draw_output(
+        target_canvas, duty_cycle_percent, mode_var, live_buck_var, live_boost_var, frec
+    ):
         """
         Draws a line representing the smoothed DC output voltage (V_avg)
         with a small sinusoidal ripple based on the Buck/Boost mode.
@@ -508,18 +516,18 @@ def main():
 
         duty_decimal = duty_cycle_percent / 100.0
         current_mode = mode_var
-        
+
         # ### --- CAMBIO: Uso directo de valor numérico ---
         # f_value ahora es float directo (ej. 60.0), multiplicamos por 1000 para Hz
-        f_value = float(frec) * 1000.0 
+        f_value = float(frec) * 1000.0
 
         # Buscamos el valor más cercano o usamos default
-        v_ripple = RIPPLE_LOOKUP.get(f_value, 0.01) # Default 0.01 si no está exacto
-        
+        v_ripple = RIPPLE_LOOKUP.get(f_value, 0.01)  # Default 0.01 si no está exacto
+
         # ---  Calculate Average Output Voltage (V_avg) ---
         if current_mode == 1:  # BUCK
             # V_out ≈ D * V_in * 0.93 (using the same formula from draw_pwm_waveform)
-            V_avg = V_BUCK * duty_decimal * 0.93
+            V_avg = live_buck_var.get()
 
             # Define max expected output voltage for scaling
             V_max_display = 30.0
@@ -534,7 +542,7 @@ def main():
             else:
                 # V_out ≈ V_in / (1 - D) * 0.87
                 v_ripple *= 2
-                V_avg = (0.87 * V_BOOST) / (1.0 - duty_decimal)
+                V_avg = live_boost_var.get()
 
         # ---  Scale V_avg and Ripple to Pixel Coordinates ---
 
@@ -605,7 +613,7 @@ def main():
             return
 
         grid_color = "#000000"
-        
+
         # ### --- CAMBIO: Uso directo de valor numérico ---
         # f_value ahora es float directo (ej. 60.0), multiplicamos por 1000 para Hz
         f_value = float(frec) * 1000.0
@@ -674,7 +682,7 @@ def main():
         frec_canvas.create_text(
             width - 15,
             17,
-            text=f"Frecuencia: {int(frec)}kHz", # Mostrar como entero
+            text=f"Frecuencia: {int(frec)}kHz",  # Mostrar como entero
             anchor="ne",
             fill="#000",
         )
@@ -710,13 +718,13 @@ def main():
         v_low_label = "0.0V"
 
         if current_mode == 1:  # BUCK
-            v_avg = V_BUCK * duty_decimal * 0.93
+            v_avg = live_buck_var.get()
             v_avg_text = f"Buck V_out: {v_avg:.2f}V"
         else:  # BOOST
             if duty_decimal >= 0.99:
                 v_avg_text = "Boost V_out: ---"
             else:
-                v_avg = (0.87 * V_BOOST) / (1.0 - duty_decimal)
+                v_avg = live_boost_var.get()
                 v_avg_text = f"Boost V_out: {v_avg:.2f}V"
 
         canvas.create_text(10, y_high, text=v_high_label, anchor="w", fill="#555")
@@ -802,7 +810,12 @@ def main():
         # Pasamos el valor numérico directo de frecuencia
         draw_frec(frec_var.get(), duty_var.get())
         draw_output(
-            output_canvas, duty_var.get(), mode_var.get(), 23, 12, frec_var.get()
+            output_canvas,
+            duty_var.get(),
+            mode_var.get(),
+            live_buck_var,
+            live_boost_var,
+            frec_var.get(),
         )
 
     def set_operational_point():
@@ -955,7 +968,12 @@ def main():
             draw_frec(frec_var.get(), duty_var.get())
         elif event.widget == output_canvas:
             draw_output(
-                output_canvas, duty_var.get(), mode_var.get(), 23, 12, frec_var.get()
+                output_canvas,
+                duty_var.get(),
+                mode_var.get(),
+                live_buck_var,
+                live_boost_var,
+                frec_var.get(),
             )
 
     canvas.bind("<Configure>", on_resize)
@@ -972,11 +990,81 @@ def main():
         draw_pwm_waveform(duty_var.get())
         draw_frec(frec_var.get(), duty_var.get())
         draw_output(
-            output_canvas, duty_var.get(), mode_var.get(), 23, 12, frec_var.get()
+            output_canvas,
+            duty_var.get(),
+            mode_var.get(),
+            live_buck_var,
+            live_boost_var,
+            frec_var.get(),
         )
 
-    root.after(100, initial_draw)
+    # --- UDP Listener Function ---
+    def start_udp_listener():
+        UDP_IP = "0.0.0.0"  # Listen to ALL incoming traffic
+        UDP_PORT = 3333
 
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.bind((UDP_IP, UDP_PORT))
+        sock.settimeout(1.0)  # Don't block forever so we can close cleanly
+
+        update_log(f"Escuchando UDP en puerto {UDP_PORT}...")
+
+        def listen_loop():
+            while not stop_udp_thread:
+                try:
+                    data, addr = sock.recvfrom(1024)  # Buffer size is 1024 bytes
+                    message = data.decode("utf-8")
+
+                    # Parse the string: "Buck: 12.50 V, Boost: 24.00 V"
+                    # We use Regex to find the numbers
+                    match = re.search(
+                        r"Buck:\s*([\d\.]+)\s*V,\s*Boost:\s*([\d\.]+)\s*V", message
+                    )
+
+                    if match:
+                        v_buck_read = float(match.group(1))
+                        v_boost_read = float(match.group(2))
+
+                        # Update Tkinter variables safely
+                        # (root.after ensures we don't crash the GUI thread)
+                        root.after(0, lambda: live_buck_var.set(v_buck_read))
+                        root.after(0, lambda: live_boost_var.set(v_boost_read))
+
+                        def update_visuals():
+                            # Update the data variables
+                            live_buck_var.set(v_buck_read)
+                            live_boost_var.set(v_boost_read)
+
+                            # TRIGGER REDRAW
+                            # This refreshes the text labels and the graph lines
+                            draw_pwm_waveform(duty_var.get())
+                            draw_output(
+                                output_canvas,
+                                duty_var.get(),
+                                mode_var.get(),
+                                live_buck_var,
+                                live_boost_var,
+                                frec_var.get(),
+                            )
+
+                        # Schedule the update on the Main Thread
+                        root.after(0, update_visuals)
+
+                except socket.timeout:
+                    continue  # Loop back and check stop_flag
+                except Exception as e:
+                    print(f"UDP Error: {e}")
+                    break
+
+            sock.close()
+            print("UDP Socket Closed")
+
+        # Start the background thread
+        t = threading.Thread(target=listen_loop, daemon=True)
+        t.start()
+
+    root.after(100, initial_draw)
+    start_udp_listener()
     root.mainloop()
 
 
