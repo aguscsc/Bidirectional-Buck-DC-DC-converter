@@ -3,10 +3,10 @@
 #include "esp_adc/adc_cali_scheme.h"
 // handles the immediate reading mode
 #include "esp_adc/adc_oneshot.h"
-// handles the wifi events 
+// handles the wifi events
 #include "esp_event.h"
 #include "esp_wifi.h"
-//for printing
+// for printing
 #include "esp_log.h"
 // to pause processes
 #include "freertos/FreeRTOS.h"
@@ -23,10 +23,10 @@
 const static char *TAG = "WIFI_SENSOR";
 
 // --- USER CONFIGURATION (CHANGE THESE!) ---
-#define WIFI_SSID "aguswifi"
+#define WIFI_SSID "Agus"
 #define WIFI_PASS "28062125"
-#define PC_IP_ADDR "192.168.50.128" // <--- PC's IP
-#define PORT 3333                   // <--- Port used in 'nc -u -l -p 3333'
+#define PC_IP_ADDR "10.166.84.29" // <--- PC's IP
+#define PORT 3333                 // <--- Port used in 'nc -u -l -p 3333'
 
 // ADC Config
 #define ADC_BUCK ADC_CHANNEL_6  // GPIO 34
@@ -36,8 +36,11 @@ const static char *TAG = "WIFI_SENSOR";
 #define BOOST_RATIO 11.0f
 
 // --- Wi-Fi Boilerplate globals ---
-static EventGroupHandle_t s_wifi_event_group; // takes values depending on the state of the connection, points to a dashboard with events
-#define WIFI_CONNECTED_BIT BIT0 // binary signal to read the event thats taking place
+static EventGroupHandle_t
+    s_wifi_event_group; // takes values depending on the state of the
+                        // connection, points to a dashboard with events
+#define WIFI_CONNECTED_BIT                                                     \
+  BIT0 // binary signal to read the event thats taking place
 
 // Declare global function to use later
 static bool adc_calibration_init(adc_unit_t unit, adc_channel_t channel,
@@ -48,39 +51,45 @@ void wifi_init_sta(void);
 // --- MAIN APPLICATION ---
 void app_main(void) {
   // Initialize NVS (non-voltaile storage) (Required for Wi-Fi)
-  esp_err_t ret = nvs_flash_init(); // Initialize memory 
+  esp_err_t ret = nvs_flash_init(); // Initialize memory
   // checks if there's space, if not, it wipes the junk and tries again
   if (ret == ESP_ERR_NVS_NO_FREE_PAGES ||
       ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
     ESP_ERROR_CHECK(nvs_flash_erase());
     ret = nvs_flash_init();
   }
-  ESP_ERROR_CHECK(ret); //checks for corruption
+  ESP_ERROR_CHECK(ret); // checks for corruption
 
   // Start Wi-Fi
   ESP_LOGI(TAG, "Starting Wi-Fi...");
   wifi_init_sta();
 
   // Setup UDP Socket
-  int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);//addr family, datagram, protocol
-  //structure 
+  int sock = socket(AF_INET, SOCK_DGRAM,
+                    IPPROTO_UDP); // addr family, datagram, protocol
+  // structure
   struct sockaddr_in dest_addr;
   dest_addr.sin_addr.s_addr = inet_addr(PC_IP_ADDR);
   dest_addr.sin_family = AF_INET;
   dest_addr.sin_port = htons(PORT);
 
   // Setup ADC
-  adc_oneshot_unit_handle_t adc1_handle; // declares pointer to heap with adc rules
-  adc_oneshot_unit_init_cfg_t init_config = {.unit_id = ADC_UNIT_1}; // sets the adc unit to use
-  ESP_ERROR_CHECK(adc_oneshot_new_unit(&init_config, &adc1_handle)); // check for errors
+  adc_oneshot_unit_handle_t
+      adc1_handle; // declares pointer to heap with adc rules
+  adc_oneshot_unit_init_cfg_t init_config = {
+      .unit_id = ADC_UNIT_1}; // sets the adc unit to use
+  ESP_ERROR_CHECK(
+      adc_oneshot_new_unit(&init_config, &adc1_handle)); // check for errors
 
-  adc_oneshot_chan_cfg_t config = {.bitwidth = ADC_BITWIDTH_DEFAULT,
-                                   .atten = ADC_ATTEN_DB_12}; // 12 bit, atten = 3, max ~2.45 V with and errror up to 60mV
+  adc_oneshot_chan_cfg_t config = {
+      .bitwidth = ADC_BITWIDTH_DEFAULT,
+      .atten = ADC_ATTEN_DB_12}; // 12 bit, atten = 3, max ~2.45 V with and
+                                 // errror up to 60mV
   // config GPIO 35 & 34
   ESP_ERROR_CHECK(adc_oneshot_config_channel(adc1_handle, ADC_BUCK, &config));
   ESP_ERROR_CHECK(adc_oneshot_config_channel(adc1_handle, ADC_BOOST, &config));
 
-  //hanles for calibration
+  // hanles for calibration
   adc_cali_handle_t cali_handle_buck = NULL;
   adc_cali_handle_t cali_handle_boost = NULL;
   bool do_calib_buck = adc_calibration_init(ADC_UNIT_1, ADC_BUCK,
@@ -130,8 +139,9 @@ void app_main(void) {
              v_boost);
 
     // Send the packet
-    int err = sendto(sock, payload, strlen(payload), 0,
-                     (struct sockaddr *)&dest_addr, sizeof(dest_addr));//socket, buffer, lenght, udp, ip and port
+    int err =
+        sendto(sock, payload, strlen(payload), 0, (struct sockaddr *)&dest_addr,
+               sizeof(dest_addr)); // socket, buffer, lenght, udp, ip and port
     if (err < 0) {
       ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
     } else {
@@ -169,7 +179,8 @@ void wifi_init_sta(void) {
   esp_netif_create_default_wifi_sta();
 
   // wifi config
-  wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT(); // initialize deafult wifi config
+  wifi_init_config_t cfg =
+      WIFI_INIT_CONFIG_DEFAULT(); // initialize deafult wifi config
   // check the config for errors
   ESP_ERROR_CHECK(esp_wifi_init(&cfg));
 
@@ -181,7 +192,7 @@ void wifi_init_sta(void) {
   ESP_ERROR_CHECK(esp_event_handler_instance_register(
       IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler, NULL, &instance_got_ip));
 
-  //wifi object
+  // wifi object
   wifi_config_t wifi_config = {
       .sta =
           {
@@ -196,7 +207,8 @@ void wifi_init_sta(void) {
   // Block until we are connected
   ESP_LOGI(TAG, "Waiting for Wi-Fi...");
   xEventGroupWaitBits(s_wifi_event_group, WIFI_CONNECTED_BIT, pdFALSE, pdFALSE,
-                      portMAX_DELAY); // read the event until it is connected, do not change it, use max delay
+                      portMAX_DELAY); // read the event until it is connected,
+                                      // do not change it, use max delay
   ESP_LOGI(TAG, "Connected!");
 }
 
