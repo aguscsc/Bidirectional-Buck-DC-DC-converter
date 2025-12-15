@@ -222,6 +222,9 @@ CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 CMAKE_PROJECT_NAME:STATIC=voltage_sensor
 
 //Value Computed by CMake
+CMAKE_PROJECT_SPDX_LICENSE:STATIC=
+
+//Value Computed by CMake
 CMAKE_PROJECT_VERSION:STATIC=3.6.4
 
 //Value Computed by CMake
@@ -432,9 +435,9 @@ CMAKE_CACHEFILE_DIR:INTERNAL=/home/wepi/github/Bidirectional-Buck-DC-DC-converte
 //Major version of cmake used to create the current loaded cache
 CMAKE_CACHE_MAJOR_VERSION:INTERNAL=4
 //Minor version of cmake used to create the current loaded cache
-CMAKE_CACHE_MINOR_VERSION:INTERNAL=1
+CMAKE_CACHE_MINOR_VERSION:INTERNAL=2
 //Patch version of cmake used to create the current loaded cache
-CMAKE_CACHE_PATCH_VERSION:INTERNAL=2
+CMAKE_CACHE_PATCH_VERSION:INTERNAL=1
 //Path to CMake executable.
 CMAKE_COMMAND:INTERNAL=/usr/bin/cmake
 //Path to cpack program executable.
@@ -603,9 +606,9 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
 C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS:INTERNAL=1
 //Details about finding Git
-FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[/usr/bin/git][v2.51.2()]
+FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[/usr/bin/git][v2.52.0()]
 //Details about finding Python3
-FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/home/wepi/.espressif/python_env/idf5.5_py3.13_env/bin/python][found components: Interpreter ][v3.13.7()]
+FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/home/wepi/.espressif/python_env/idf5.5_py3.13_env/bin/python][found components: Interpreter ][v3.13.11()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //ADVANCED property for variable: GIT_EXECUTABLE
@@ -618,7 +621,7 @@ _Python3_Compiler_REASON_FAILURE:INTERNAL=
 _Python3_Development_REASON_FAILURE:INTERNAL=
 _Python3_EXECUTABLE:INTERNAL=/home/wepi/.espressif/python_env/idf5.5_py3.13_env/bin/python
 //Python3 Properties
-_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;13;7;32;64;;;abi3;/usr/lib/python3.13;/home/wepi/.espressif/python_env/idf5.5_py3.13_env/lib/python3.13;/home/wepi/.espressif/python_env/idf5.5_py3.13_env/lib/python3.13/site-packages;/home/wepi/.espressif/python_env/idf5.5_py3.13_env/lib/python3.13/site-packages
+_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;13;11;32;64;;;abi3;/usr/lib/python3.13;/home/wepi/.espressif/python_env/idf5.5_py3.13_env/lib/python3.13;/home/wepi/.espressif/python_env/idf5.5_py3.13_env/lib/python3.13/site-packages;/home/wepi/.espressif/python_env/idf5.5_py3.13_env/lib/python3.13/site-packages
 _Python3_INTERPRETER_SIGNATURE:INTERNAL=381a682bc67ee234c6ee12458b61f51b
 //NumPy reason failure
 _Python3_NumPy_REASON_FAILURE:INTERNAL=

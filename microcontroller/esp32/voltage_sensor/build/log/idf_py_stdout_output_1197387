@@ -1,0 +1,72 @@
+Command: ninja flash
+[1/5] cd /home/wepi/github/Bidirectional-Buck-DC-DC-converter/microcontroller/esp32/voltage_sensor/build/esp-idf/esptool_py && /home/wepi/.espressif/python_env/idf5.5_py3.13_env/bin/python /opt/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/wepi/github/Bidirectional-Buck-DC-DC-converter/microcontroller/esp32/voltage_sensor/build/partition_table/partition-table.bin /home/wepi/github/Bidirectional-Buck-DC-DC-converter/microcontroller/esp32/voltage_sensor/build/voltage_sensor.bin
+voltage_sensor.bin binary size 0xbdf40 bytes. Smallest app partition is 0x100000 bytes. 0x420c0 bytes (26%) free.
+[2/5] Performing build step for 'bootloader'
+[1/1] cd /home/wepi/github/Bidirectional-Buck-DC-DC-converter/microcontroller/esp32/voltage_sensor/build/bootloader/esp-idf/esptool_py && /home/wepi/.espressif/python_env/idf5.5_py3.13_env/bin/python /opt/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 /home/wepi/github/Bidirectional-Buck-DC-DC-converter/microcontroller/esp32/voltage_sensor/build/bootloader/bootloader.bin
+Bootloader binary size 0x6680 bytes. 0x980 bytes (8%) free.
+[3/5] No install step for 'bootloader'
+[4/5] Completed 'bootloader'
+[4/5] cd /opt/esp-idf/components/esptool_py && /usr/bin/cmake -D IDF_PATH=/opt/esp-idf -D "SERIAL_TOOL=/home/wepi/.espressif/python_env/idf5.5_py3.13_env/bin/python;;/opt/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/home/wepi/github/Bidirectional-Buck-DC-DC-converter/microcontroller/esp32/voltage_sensor/build -P /opt/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32 -p /dev/ttyUSB0 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 bootloader/bootloader.bin 0x10000 voltage_sensor.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.11.dev1
+Serial port /dev/ttyUSB0
+Connecting....
+Chip is ESP32-D0WD-V3 (revision v3.1)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: 84:1f:e8:32:b9:08
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00001000 to 0x00007fff...
+Flash will be erased from 0x00010000 to 0x000cdfff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+SHA digest in image updated
+Compressed 26240 bytes to 16502...
+Writing at 0x00001000... (50 %)
+Writing at 0x000075e5... (100 %)
+Wrote 26240 bytes (16502 compressed) at 0x00001000 in 0.7 seconds (effective 302.5 kbit/s)...
+Hash of data verified.
+Compressed 778048 bytes to 487440...
+Writing at 0x00010000... (3 %)
+Writing at 0x0001c7d0... (6 %)
+Writing at 0x00025149... (10 %)
+Writing at 0x0002fc9a... (13 %)
+Writing at 0x000356c0... (16 %)
+Writing at 0x0003b6cf... (20 %)
+Writing at 0x00041073... (23 %)
+Writing at 0x00046bc3... (26 %)
+Writing at 0x0004c7e6... (30 %)
+Writing at 0x00052260... (33 %)
+Writing at 0x00058283... (36 %)
+Writing at 0x0005de13... (40 %)
+Writing at 0x00063f8e... (43 %)
+Writing at 0x000695a3... (46 %)
+Writing at 0x0006ee5f... (50 %)
+Writing at 0x00074afd... (53 %)
+Writing at 0x0007a41e... (56 %)
+Writing at 0x0007f9f4... (60 %)
+Writing at 0x00085516... (63 %)
+Writing at 0x0008b509... (66 %)
+Writing at 0x00090d67... (70 %)
+Writing at 0x00096a86... (73 %)
+Writing at 0x0009c490... (76 %)
+Writing at 0x000a1ea3... (80 %)
+Writing at 0x000ab793... (83 %)
+Writing at 0x000b27c7... (86 %)
+Writing at 0x000b861a... (90 %)
+Writing at 0x000be1f9... (93 %)
+Writing at 0x000c45c8... (96 %)
+Writing at 0x000c9944... (100 %)
+Wrote 778048 bytes (487440 compressed) at 0x00010000 in 11.1 seconds (effective 562.8 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 103...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (103 compressed) at 0x00008000 in 0.1 seconds (effective 467.4 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...

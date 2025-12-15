@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "voltage_sensor",
-    "project_version":    "06ea5e7-dirty",
+    "project_version":    "7fbf1d0-dirty",
     "project_path":       "/home/wepi/github/Bidirectional-Buck-DC-DC-converter/microcontroller/esp32/voltage_sensor",
     "idf_path":           "/opt/esp-idf",
     "build_dir":          "/home/wepi/github/Bidirectional-Buck-DC-DC-converter/microcontroller/esp32/voltage_sensor/build",

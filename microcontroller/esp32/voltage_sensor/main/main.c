@@ -25,15 +25,15 @@ const static char *TAG = "WIFI_SENSOR";
 // --- USER CONFIGURATION (CHANGE THESE!) ---
 #define WIFI_SSID "Agus"
 #define WIFI_PASS "28062125"
-#define PC_IP_ADDR "10.166.84.29" // <--- PC's IP
+#define PC_IP_ADDR "10.253.22.29" // <--- PC's IP
 #define PORT 3333                 // <--- Port used in 'nc -u -l -p 3333'
 
 // ADC Config
 #define ADC_BUCK ADC_CHANNEL_6  // GPIO 34
 #define ADC_BOOST ADC_CHANNEL_7 // GPIO 35
 // ratio = v_max / 2.45
-#define BUCK_RATIO 5.71f
-#define BOOST_RATIO 11.0f
+#define BUCK_RATIO 5.571f
+#define BOOST_RATIO 11.830f
 
 // --- Wi-Fi Boilerplate globals ---
 static EventGroupHandle_t
