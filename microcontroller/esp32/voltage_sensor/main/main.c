@@ -22,18 +22,17 @@
 
 const static char *TAG = "WIFI_SENSOR";
 
-// --- USER CONFIGURATION (CHANGE THESE!) ---
+// --- USER CONFIGURATION ---
 #define WIFI_SSID "Agus"
 #define WIFI_PASS "28062125"
-#define PC_IP_ADDR "10.253.22.29" // <--- PC's IP
-#define PORT 3333                 // <--- Port used in 'nc -u -l -p 3333'
+#define PC_IP_ADDR "10.130.219.29" // <--- PC's IP
+#define PORT 3333                  // <--- Port used
 
 // ADC Config
 #define ADC_BUCK ADC_CHANNEL_6  // GPIO 34
 #define ADC_BOOST ADC_CHANNEL_7 // GPIO 35
-// ratio = v_max / 2.45
-#define BUCK_RATIO 5.571f
-#define BOOST_RATIO 11.830f
+#define BUCK_RATIO 5.1279f
+#define BOOST_RATIO 11.5184f
 
 // --- Wi-Fi Boilerplate globals ---
 static EventGroupHandle_t
@@ -97,7 +96,7 @@ void app_main(void) {
   bool do_calib_boost = adc_calibration_init(
       ADC_UNIT_1, ADC_BOOST, ADC_ATTEN_DB_12, &cali_handle_boost);
 
-  // 5. MAIN LOOP
+  // MAIN LOOP
   while (1) {
     // --- READ SENSORS ---
     uint32_t sum_buck = 0, sum_boost = 0;
@@ -152,7 +151,7 @@ void app_main(void) {
   }
 }
 
-// --- WI-FI HELPERS (The heavy boilerplate) ---
+// --- WI-FI HELPERS  ---
 static void event_handler(void *arg, esp_event_base_t event_base,
                           int32_t event_id, void *event_data) {
   if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {

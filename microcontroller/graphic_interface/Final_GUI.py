@@ -319,9 +319,9 @@ def main():
         frec_slider.config(state="disabled")
 
         if mode_var.get() == 1:
-            warning_log("Keep Duty under 70%")
+            warning_log("Keep Duty under 80%")
         elif mode_var.get() == 0:
-            warning_log("Keep Duty under 60%")
+            warning_log("Keep Duty under 80%")
 
         def enable_controls():
             duty_slider.config(state="enabled")
@@ -776,29 +776,29 @@ def main():
             duty_var.set(rounded_value)
 
         if mode_var.get() == 1:  # BUCK
-            if rounded_value > 70:
+            if rounded_value > 80:
                 if warn_var.get() == 0:
                     warn_var.set(1)
                     warning_popup("ADVERTENCIA", "Sobre el punto de Operación sugerido")
                     if duty_var.get() != rounded_value:
                         return
-            elif rounded_value == 65:
-                update_log("Punto de operación sugerido 65 %")
+            elif rounded_value == 72:
+                update_log("Punto de operación sugerido 72 %")
             elif rounded_value < 70:
                 warn_var.set(0)
 
             send2controller(rounded_value, frec_var.get())
 
         elif mode_var.get() == 0:  # BOOST
-            if rounded_value > 60:
+            if rounded_value > 80:
                 if warn_var.get() == 0:
                     warn_var.set(1)
                     warning_popup("ADVERTENCIA", "Sobre el punto de operación sugerido")
                     if duty_var.get() != rounded_value:
                         return
             # --- FIX: Use 'and', not '&' ---
-            elif rounded_value == 55 and mode_var.get() == 0:
-                update_log("Punto de operación sugerido 55 %")
+            elif rounded_value == 67 and mode_var.get() == 0:
+                update_log("Punto de operación sugerido 67 %")
             elif rounded_value < 60:
                 warn_var.set(0)
 
