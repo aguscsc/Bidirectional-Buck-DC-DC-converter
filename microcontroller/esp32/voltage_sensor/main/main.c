@@ -23,10 +23,10 @@
 const static char *TAG = "WIFI_SENSOR";
 
 // --- USER CONFIGURATION ---
-#define WIFI_SSID "Agus"
-#define WIFI_PASS "28062125"
-#define PC_IP_ADDR "10.130.219.29" // <--- PC's IP
-#define PORT 3333                  // <--- Port used
+#define WIFI_SSID "ID"
+#define WIFI_PASS "PASSWORD"
+#define PC_IP_ADDR "IP" // <--- PC's IP
+#define PORT 3333       // <--- Port used
 
 // ADC Config
 #define ADC_BUCK ADC_CHANNEL_6  // GPIO 34

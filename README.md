@@ -206,10 +206,59 @@ The final PCB design consolidates all previously discussed subsystems into a sin
 
 ![FINAL pcb](/pics/PCB_final.png)
 
-## ✅ TODO   
-- [ ] Firmware integration (ESP32 control)
+## ESP32 Telemetry & Sensing
+To enable real-time monitoring, an **ESP32** module acts as a wireless telemetry unit. It senses input/output voltages and transmits data back to the Graphical Interface via Wi-Fi, allowing for remote performance tracking without physical probes.
+
+
+
+### ⚡ Signal Conditioning (Voltage Divider)
+The ESP32 GPIOs are not 5V tolerant and operate at a **3.3V logic level**. Since the converter handles up to 27V, voltage dividers are mandatory to scale the signals into the ADC's linear range ($100\text{mV}$ to $2.45\text{V}$ at $12\text{dB}$ attenuation).
+
+The scaling follows the voltage divider formula:
+
+$$V_{adc} = V_{out} \cdot \left( \frac{R_2}{R_1 + R_2} \right)$$
+
+**Recommended Resistor Values:**
+| Target Rail | Max Voltage | $R_1$ (Source) | $R_2$ (GND) | Divider Ratio | Max $V_{adc}$ |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Buck Output** | 14V | $47\text{k}\Omega$ | $10\text{k}\Omega$ | $0.175$ | $2.45\text{V}$ |
+| **Boost Output** | 27V | $100\text{k}\Omega$ | $10\text{k}\Omega$ | $0.091$ | $2.45\text{V}$ |
+
+> [!WARNING]
+> Always verify the divider output with a multimeter before connecting to the ESP32. Overvoltage will permanently damage the SoC.
+
+### 🌐 Wireless Protocol: UDP
+We implemented the **UDP (User Datagram Protocol)** for data transmission:
+* **Low Latency:** Unlike TCP, UDP does not require a handshake, making it ideal for high-frequency telemetry updates.
+* **Efficiency:** Smaller packet overhead reduces the power consumption and processing time of the ESP32.
+
+### 🛠️ Software Configuration (ESP-IDF)
+The firmware is built using the **ESP-IDF v5.x** framework. To integrate it with your local network, modify the constants in `main/main.c`:
+
+```c
+// --- USER CONFIGURATION ---
+#define WIFI_SSID      "Your_SSID"
+#define WIFI_PASS      "Your_Password"
+#define PC_IP_ADDR     "192.168.1.XX" // Your PC's local IP
+#define PORT           3333           // Must match GUI port
 ---
 
+**Deployment:**
+
+1. Connect the ESP32 via USB.
+2. Initialize the environment: `. $HOME/esp/esp-idf/export.sh`
+3. Build and flash:
+```bash
+idf.py build flash monitor
+
+```
+### ESP32 PCB
+
+Additionally a pcb was desgined to use the telemetry ssitem as an add-on to the converter
+
+![esp pcb](/pics/esp32_pcb.png)
+
+---
 ## 👥 Collaborators
 - **[Agustín Torres](https://github.com/aguscsc)**  
 - **[Ignacio Cerda](https://github.com/LovesCharlie)**  
@@ -222,3 +271,4 @@ The final PCB design consolidates all previously discussed subsystems into a sin
 -   Erickson – Fundamentals of Power Electronics, Cap. 3
 -   Power Electronics: Converters, Applications, and Design” – Ned Mohan
 -   Electronica de Potencia, 1era edicion - Daniel W.Hart
+
