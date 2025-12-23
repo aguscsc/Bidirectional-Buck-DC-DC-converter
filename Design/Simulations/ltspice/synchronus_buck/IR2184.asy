@@ -1,0 +1,34 @@
+Version 4
+SymbolType BLOCK
+RECTANGLE Normal -48 -72 64 72
+WINDOW 0 8 -72 Bottom 2
+SYMATTR Prefix X
+SYMATTR Value IR2184
+SYMATTR ModelFile Z:\home\wepi\circuits\synchronus_buck\IR2184.sub
+SYMATTR SpiceLine Cdelay=50n Rdelay=50 T1=-40 T2=25 T3=125 V1=10 V2=15 V3=20 toffT1=270n toffT2=270n toffT3=270n toffV1=270n toffV2=270n toffV3=270n tonT1=210n tonT2=210n tonT3=210n tonV1=210n tonV2=210n tonV3=210n
+WINDOW 3 8 72 Top 2
+WINDOW 39 8 96 Top 2
+PIN -48 -48 LEFT 8
+PINATTR PinName VCC
+PINATTR SpiceOrder 1
+PIN -48 -16 LEFT 8
+PINATTR PinName IN
+PINATTR SpiceOrder 2
+PIN -48 16 LEFT 8
+PINATTR PinName SD
+PINATTR SpiceOrder 3
+PIN -48 48 LEFT 8
+PINATTR PinName com
+PINATTR SpiceOrder 4
+PIN 64 -48 RIGHT 8
+PINATTR PinName VB
+PINATTR SpiceOrder 5
+PIN 64 -16 RIGHT 8
+PINATTR PinName HO
+PINATTR SpiceOrder 6
+PIN 64 16 RIGHT 8
+PINATTR PinName VS
+PINATTR SpiceOrder 7
+PIN 64 48 RIGHT 8
+PINATTR PinName LO
+PINATTR SpiceOrder 8
