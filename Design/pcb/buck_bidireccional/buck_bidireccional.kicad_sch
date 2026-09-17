@@ -2157,7 +2157,7 @@
 		)
 		(uuid "88c96e9f-32e4-423f-9e04-b4da5ba6e594")
 	)
-	(text_box "Footprints \n\nterminal block:	TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal \ncapacitors:  Capacitor_THT:CP_Radial_D5.0mm_P2.00mm \nresistors: R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal (REVISION)\ndiodes: Diode_THT:D_A-405_P7.62mm_Horizontal(REVISION)\nmosfets: TO-220-3_Vertical\npins:	Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical\ndriver:	Package_SO:SOIC-8_3.9x4.9mm_P1.27mm\nTestpoint: TestPoint:TestPoint_Bridge_Pitch2.54mm_Drill0.7mm\n"
+	(text_box "Footprints \n\nterminal block:	TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal \ncapacitors:  Capacitor_THT:CP_Radial_D5.0mm_P2.00mm \nresistors: R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal (REVISION)\ndiodes: Diode_THT:D_A-405_P7.62mm_Horizontal(REVISION)\nmosfets: TO-220-3_Vertical\npins:	Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical\ndriver:	Package_SO:SOIC-8_3.9x4.9mm_P1.27mm\nTestpoint: TestPoint:TestPoint_Bridge_Pitch2.54mm_Drill0.7mm\n."
 		(exclude_from_sim no)
 		(at 177.8 19.05 0)
 		(size 104.14 25.4)
