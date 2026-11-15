@@ -7,7 +7,7 @@ The system can operate in both **buck mode** (step-down) and **boost mode** (ste
 ## Software used
 - **Simulation**
   
-   Multisim, Ltspice and MATLAB/Simulink
+   Ltspice and MATLAB/Simulink
    coil64
 - **PCB**
   
